@@ -1,0 +1,469 @@
+{
+  "_comment": "Donation channels shown in the 'Donate' section, in this order. A field with value null shows 'details coming soon'. 'match' = country codes that pre-select this option. rateFromEur is only used to show approximate gift amounts (≈) in the visitor's currency. 'featured' shows the tile full-width.",
+  "regions": [
+    {
+      "id": "swift",
+      "label": {
+        "en": "Tanzania · EUR",
+        "de": "Tansania · EUR"
+      },
+      "sub": {
+        "en": "EUR · SWIFT",
+        "de": "EUR · SWIFT"
+      },
+      "currency": "EUR",
+      "rateFromEur": 1,
+      "match": [],
+      "method": {
+        "en": "International bank transfer (SWIFT) straight to the school's own account in Zanzibar",
+        "de": "Auslandsüberweisung (SWIFT) direkt aufs eigene Konto der Schule in Sansibar"
+      },
+      "fields": [
+        {
+          "key": "holder",
+          "value": "Straight Training Center"
+        },
+        {
+          "key": "accountNumber",
+          "value": "3014211910745"
+        },
+        {
+          "key": "swiftBic",
+          "value": "EQBLTZTZ"
+        },
+        {
+          "key": "bank",
+          "value": "Equity Bank Tanzania Ltd, Zanzibar"
+        },
+        {
+          "key": "bankCode",
+          "value": "047"
+        },
+        {
+          "key": "bankAddress",
+          "value": "P.O. Box 110183, Dar es Salaam, Tanzania"
+        },
+        {
+          "key": "currency",
+          "value": "EUR",
+          "copy": false
+        },
+        {
+          "key": "reference",
+          "value": "Donation Building"
+        }
+      ],
+      "notes": [
+        {
+          "en": "The school's bank charges about €7 per incoming transfer, and your bank may charge an international fee too – best for larger amounts.",
+          "de": "Die Bank der Schule verlangt rund 7 € pro eingehender Überweisung, dazu kommen evtl. Auslandsgebühren deiner Bank – am besten für grössere Beträge."
+        }
+      ],
+      "warn": true
+    },
+    {
+      "id": "eu",
+      "label": {
+        "en": "Euro area",
+        "de": "Euro-Raum"
+      },
+      "sub": {
+        "en": "EUR · SEPA",
+        "de": "EUR · SEPA"
+      },
+      "currency": "EUR",
+      "rateFromEur": 1,
+      "match": [
+        "AT",
+        "BE",
+        "CY",
+        "DE",
+        "EE",
+        "ES",
+        "FI",
+        "FR",
+        "GR",
+        "HR",
+        "IE",
+        "IT",
+        "LT",
+        "LU",
+        "LV",
+        "MT",
+        "NL",
+        "PT",
+        "SI",
+        "SK",
+        "BG",
+        "CZ",
+        "DK",
+        "HU",
+        "IS",
+        "NO",
+        "PL",
+        "RO",
+        "SE"
+      ],
+      "method": {
+        "en": "SEPA bank transfer in euros",
+        "de": "SEPA-Überweisung in Euro"
+      },
+      "fields": [
+        {
+          "key": "holder",
+          "value": "Sustainable Integration GmbH"
+        },
+        {
+          "key": "iban",
+          "value": "LT30 3250 0850 3226 4077",
+          "copy": "LT303250085032264077"
+        },
+        {
+          "key": "bic",
+          "value": "REVOLT21"
+        },
+        {
+          "key": "bank",
+          "value": "Revolut Bank UAB",
+          "copy": false
+        },
+        {
+          "key": "reference",
+          "value": "Donation to Straight Training Center"
+        }
+      ],
+      "notes": [
+        {
+          "en": "SEPA transfers in euros are usually free or very cheap from any European bank. From outside the European Economic Area, your bank may also ask for the intermediary BIC CHASDEFX.",
+          "de": "SEPA-Überweisungen in Euro sind bei europäischen Banken meist kostenlos oder sehr günstig. Von ausserhalb des EWR fragt deine Bank evtl. nach der Zwischenbank-BIC CHASDEFX."
+        }
+      ],
+      "viaPartner": true
+    },
+    {
+      "id": "ch",
+      "label": {
+        "en": "Switzerland",
+        "de": "Schweiz"
+      },
+      "sub": {
+        "en": "CHF",
+        "de": "CHF"
+      },
+      "currency": "CHF",
+      "rateFromEur": 0.94,
+      "match": [
+        "CH",
+        "LI"
+      ],
+      "method": {
+        "en": "Domestic transfer in Swiss francs",
+        "de": "Inlandüberweisung in Franken"
+      },
+      "fields": [
+        {
+          "key": "holder",
+          "value": "Revolut Bank UAB"
+        },
+        {
+          "key": "recipientAddress",
+          "value": "Konstitucijos ave. 21B, 08130 Vilnius, Lithuania"
+        },
+        {
+          "key": "iban",
+          "value": "CH23 0900 0IQ5 1694 2385 9",
+          "copy": "CH2309000IQ5169423859"
+        },
+        {
+          "key": "bic",
+          "value": "POFICHBE"
+        },
+        {
+          "key": "referenceRequired",
+          "value": "Sustainable Integration GmbH, CH"
+        }
+      ],
+      "notes": [
+        {
+          "en": "Important: Swiss transfers go through Revolut's Swiss collection account, so the reference must be exactly “Sustainable Integration GmbH, CH” – otherwise the transfer fails. Please don't add anything else.",
+          "de": "Wichtig: Inlandüberweisungen laufen über das Schweizer Sammelkonto von Revolut. Der Verwendungszweck muss deshalb genau „Sustainable Integration GmbH, CH“ lauten – sonst scheitert die Überweisung. Bitte nichts ergänzen."
+        }
+      ],
+      "warn": true,
+      "viaPartner": true
+    },
+    {
+      "id": "uk",
+      "label": {
+        "en": "United Kingdom",
+        "de": "Grossbritannien"
+      },
+      "sub": {
+        "en": "GBP",
+        "de": "GBP"
+      },
+      "currency": "GBP",
+      "rateFromEur": 0.86,
+      "match": [
+        "GB",
+        "GG",
+        "JE",
+        "IM"
+      ],
+      "method": {
+        "en": "UK bank transfer in pounds",
+        "de": "Britische Überweisung in Pfund"
+      },
+      "fields": [
+        {
+          "key": "holder",
+          "value": "Sustainable Integration GmbH"
+        },
+        {
+          "key": "accountNumber",
+          "value": "90220988"
+        },
+        {
+          "key": "sortCode",
+          "value": "23-01-63"
+        },
+        {
+          "key": "bank",
+          "value": "Revolut",
+          "copy": false
+        },
+        {
+          "key": "reference",
+          "value": "Donation STC"
+        }
+      ],
+      "notes": [
+        {
+          "en": "A local Faster Payments transfer – no international fees. UK references are limited to 18 characters, so please use “Donation STC”.",
+          "de": "Eine lokale Faster-Payments-Überweisung – ohne Auslandsgebühren. Britische Verwendungszwecke sind auf 18 Zeichen begrenzt, bitte „Donation STC“ verwenden."
+        }
+      ],
+      "viaPartner": true
+    },
+    {
+      "id": "us",
+      "label": {
+        "en": "United States",
+        "de": "USA"
+      },
+      "sub": {
+        "en": "USD",
+        "de": "USD"
+      },
+      "currency": "USD",
+      "rateFromEur": 1.1,
+      "match": [
+        "US",
+        "PR"
+      ],
+      "method": {
+        "en": "International wire in US dollars",
+        "de": "Auslandsüberweisung in US-Dollar"
+      },
+      "fields": [
+        {
+          "key": "holder",
+          "value": "Sustainable Integration GmbH"
+        },
+        {
+          "key": "iban",
+          "value": "LT30 3250 0850 3226 4077",
+          "copy": "LT303250085032264077"
+        },
+        {
+          "key": "bic",
+          "value": "REVOLT21"
+        },
+        {
+          "key": "intermediaryBic",
+          "value": "CHASGB2L"
+        },
+        {
+          "key": "bank",
+          "value": "Revolut Bank UAB",
+          "copy": false
+        },
+        {
+          "key": "reference",
+          "value": "Donation to Straight Training Center"
+        }
+      ],
+      "notes": [
+        {
+          "en": "This is an international wire, so your US bank will probably charge a fee – if you use Revolut, the Revolut option is free. If your bank asks for the recipient's address, please write to us at admissions@straighttraining.center.",
+          "de": "Das ist eine Auslandsüberweisung, deine US-Bank verlangt also wahrscheinlich eine Gebühr – mit Revolut ist die Revolut-Option kostenlos. Falls deine Bank nach der Adresse des Empfängers fragt, schreib uns an admissions@straighttraining.center."
+        }
+      ],
+      "viaPartner": true
+    },
+    {
+      "id": "revolut",
+      "label": {
+        "en": "Revolut",
+        "de": "Revolut"
+      },
+      "sub": {
+        "en": "30+ currencies",
+        "de": "30+ Währungen"
+      },
+      "currency": "EUR",
+      "rateFromEur": 1,
+      "match": [],
+      "method": {
+        "en": "Send instantly from your Revolut app",
+        "de": "Sofort aus deiner Revolut-App senden"
+      },
+      "fields": [
+        {
+          "key": "revtag",
+          "value": "@zanzibarcenter",
+          "copy": "zanzibarcenter"
+        },
+        {
+          "key": "note",
+          "value": "Donation to Straight Training Center"
+        }
+      ],
+      "notes": [
+        {
+          "en": "In the Revolut app, send to the Revtag @zanzibarcenter (Sustainable Integration GmbH) and write “Donation to Straight Training Center” in the note – otherwise we can't tell it's a donation.",
+          "de": "In der Revolut-App an den Revtag @zanzibarcenter (Sustainable Integration GmbH) senden und „Donation to Straight Training Center“ als Notiz schreiben – sonst können wir es nicht als Spende erkennen."
+        }
+      ],
+      "viaPartner": true
+    },
+    {
+      "id": "tz",
+      "label": {
+        "en": "Tanzania · TZS",
+        "de": "Tansania · TZS"
+      },
+      "sub": {
+        "en": "TZS · Mobile money",
+        "de": "TZS · Mobile Money"
+      },
+      "currency": "TZS",
+      "rateFromEur": 3000,
+      "match": [
+        "TZ",
+        "KE",
+        "UG"
+      ],
+      "method": {
+        "en": "Mobile money in shillings",
+        "de": "Mobile Money in Schilling"
+      },
+      "fields": [
+        {
+          "key": "tigoPesa",
+          "value": "+255 678 585 256",
+          "copy": "+255678585256"
+        },
+        {
+          "key": "receiver",
+          "value": "MORDEKAY ELINEMA",
+          "copy": false
+        }
+      ],
+      "notes": [
+        {
+          "en": "The transfer will show the name MORDEKAY ELINEMA – that is Modest's official name; “Modest” is his nickname. Please send him a short WhatsApp message afterwards so we can book your donation to the building.",
+          "de": "Bei der Überweisung erscheint der Name MORDEKAY ELINEMA – so heisst Modest offiziell, „Modest“ ist sein Spitzname. Bitte schick ihm danach kurz eine WhatsApp-Nachricht, damit wir die Spende dem Bau zubuchen können."
+        }
+      ]
+    },
+    {
+      "id": "crypto",
+      "label": {
+        "en": "Crypto",
+        "de": "Krypto"
+      },
+      "sub": {
+        "en": "ETH · USDC",
+        "de": "ETH · USDC"
+      },
+      "currency": "EUR",
+      "rateFromEur": 1,
+      "match": [],
+      "method": {
+        "en": "ETH or USDC on Ethereum or Base",
+        "de": "ETH oder USDC auf Ethereum oder Base"
+      },
+      "fields": [
+        {
+          "key": "evm",
+          "value": "0x601c5e1dcb301fe2fd0df34bc96c7237c91d73d8",
+          "qr": "assets/img/qr-eth.svg",
+          "links": [
+            [
+              "Basescan",
+              "https://basescan.org/address/0x601c5e1dcb301fe2fd0df34bc96c7237c91d73d8"
+            ],
+            [
+              "Etherscan",
+              "https://etherscan.io/address/0x601c5e1dcb301fe2fd0df34bc96c7237c91d73d8"
+            ]
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "en": "Same address for ETH and USDC on Ethereum and Base (Base has the lowest fees). Please double-check address and network – crypto transfers cannot be reversed. The wallet belongs to Straight Training Center.",
+          "de": "Gleiche Adresse für ETH und USDC auf Ethereum und Base (Base hat die tiefsten Gebühren). Bitte Adresse und Netzwerk doppelt prüfen – Krypto-Transaktionen lassen sich nicht rückgängig machen. Die Wallet gehört dem Straight Training Center."
+        },
+        {
+          "en": "You may notice earlier transactions on this address: in 2025 it received about $2,000 from Logos Circle Zanzibar for our 10 computers – documented in the computer report under “We've done this before”. Crypto donations for the building are booked in the construction ledger.",
+          "de": "Auf dieser Adresse siehst du frühere Transaktionen: 2025 gingen hier rund 2'000 $ von Logos Circle Zanzibar für unsere 10 Computer ein – dokumentiert im Computer-Bericht unter „Das haben wir schon einmal geschafft“. Krypto-Spenden für den Bau werden in der Baubuchhaltung verbucht."
+        }
+      ],
+      "warn": true
+    },
+    {
+      "id": "btc",
+      "label": {
+        "en": "Bitcoin",
+        "de": "Bitcoin"
+      },
+      "sub": {
+        "en": "BTC · on-chain",
+        "de": "BTC · on-chain"
+      },
+      "currency": "EUR",
+      "rateFromEur": 1,
+      "match": [],
+      "method": {
+        "en": "Bitcoin (on-chain)",
+        "de": "Bitcoin (on-chain)"
+      },
+      "fields": [
+        {
+          "key": "btc",
+          "value": "bc1qduj9sks7d7vct2y8tk4d6ve5frvx33vvftdscw",
+          "qr": "assets/img/qr-btc.svg",
+          "links": [
+            [
+              "mempool.space",
+              "https://mempool.space/address/bc1qduj9sks7d7vct2y8tk4d6ve5frvx33vvftdscw"
+            ]
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "en": "On-chain only (no Lightning). Please double-check the address – Bitcoin transactions cannot be reversed. The wallet belongs to Straight Training Center.",
+          "de": "Nur on-chain (kein Lightning). Bitte die Adresse doppelt prüfen – Bitcoin-Transaktionen lassen sich nicht rückgängig machen. Die Wallet gehört dem Straight Training Center."
+        },
+        {
+          "en": "You may notice earlier transactions on this address: in 2025 it received about $2,000 from Logos Circle Zanzibar for our 10 computers – documented in the computer report under “We've done this before”. Crypto donations for the building are booked in the construction ledger.",
+          "de": "Auf dieser Adresse siehst du frühere Transaktionen: 2025 gingen hier rund 2'000 $ von Logos Circle Zanzibar für unsere 10 Computer ein – dokumentiert im Computer-Bericht unter „Das haben wir schon einmal geschafft“. Krypto-Spenden für den Bau werden in der Baubuchhaltung verbucht."
+        }
+      ],
+      "warn": true
+    }
+  ]
+}
