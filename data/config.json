@@ -1,25 +1,77 @@
 {
-  "_comment": "Edit this file to change the goal, phase statuses or donor names. Amounts in EUR. The ledger is in TS (= 1'000 TZS) and is converted at tsPerEur. status: done | building | next | planned",
+  "_comment": "Edit this file to change the goal, phase statuses or donor names. Amounts in EUR. Ledger amounts in EUR count as EUR; amounts in TS (= 1,000 TZS) are converted at tsPerEur. status: done | building | next | planned. pendingAccounts: ledger accounts holding promised money that has not arrived yet.",
   "ledgerUrl": "https://construction.straighttraining.center",
   "ledgerApi": "https://construction.straighttraining.center/straight-training-center-construction-beancount-2026/api/query",
   "tsPerEur": 3.0,
   "phases": [
-    { "id": "0",  "cost": 4000,  "status": "done" },
-    { "id": "1a", "cost": 5300,  "status": "done" },
-    { "id": "1b", "cost": 8000,  "status": "next" },
-    { "id": "1c", "cost": 10000, "status": "planned" },
-    { "id": "2",  "cost": 9700,  "status": "planned" },
-    { "id": "3",  "cost": 6300,  "status": "planned" },
-    { "id": "4",  "cost": 10000, "status": "planned" },
-    { "id": "5",  "cost": 700,   "status": "planned" }
+    {
+      "id": "0",
+      "cost": 4000,
+      "status": "done"
+    },
+    {
+      "id": "1a",
+      "cost": 5300,
+      "status": "done"
+    },
+    {
+      "id": "1b",
+      "cost": 8000,
+      "status": "next"
+    },
+    {
+      "id": "1c",
+      "cost": 10000,
+      "status": "planned"
+    },
+    {
+      "id": "2",
+      "cost": 9700,
+      "status": "planned"
+    },
+    {
+      "id": "3",
+      "cost": 6300,
+      "status": "planned"
+    },
+    {
+      "id": "4",
+      "cost": 10000,
+      "status": "planned"
+    },
+    {
+      "id": "5",
+      "cost": 700,
+      "status": "planned"
+    }
   ],
   "donors": {
-    "Q:DSFAEV": { "name": "Dein Stern für Afrika e.V.", "url": "https://www.stern-fuer-afrika.de" }
+    "Q:DSFAEV": {
+      "name": "Dein Stern für Afrika e.V.",
+      "url": "https://www.stern-fuer-afrika.de"
+    }
   },
   "expenseCategories": {
-    "E:M": { "en": "Materials", "de": "Material" },
-    "E:F": { "en": "Craftsmen (fundis)", "de": "Handwerker (Fundis)" },
-    "E:Gov": { "en": "Permits & government", "de": "Genehmigungen & Behörden" },
-    "E:T": { "en": "Transport", "de": "Transport" }
-  }
+    "E:M": {
+      "en": "Materials",
+      "de": "Material"
+    },
+    "E:F": {
+      "en": "Craftsmen (fundis)",
+      "de": "Handwerker (Fundis)"
+    },
+    "E:Gov": {
+      "en": "Permits & government",
+      "de": "Genehmigungen & Behörden"
+    },
+    "E:T": {
+      "en": "Transport",
+      "de": "Transport"
+    },
+    "E:Fees": {
+      "en": "Bank fees",
+      "de": "Bankgebühren"
+    }
+  },
+  "pendingAccounts": "^A:(Pending|Pledged):"
 }

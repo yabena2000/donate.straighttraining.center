@@ -35,7 +35,7 @@
   const partnerNote = root.querySelector("[data-partner-note]");
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-  fetch(base + "data/accounts.json")
+  fetch(base + "data/accounts.json", { cache: "no-cache" })
     .then((r) => r.json())
     .then(init)
     .catch((e) => console.warn("Donation channels unavailable", e));
