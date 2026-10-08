@@ -117,6 +117,18 @@
       }
     }
 
+    // Where the money goes: everything spent is building cost except bank fees
+    if (spent > 0) {
+      const fees = toEur(prog.expenses["E:Fees"] || {}) / spent * 100;
+      const share = { build: 100 - fees, fees };
+      const fmt = (v) => v.toLocaleString(lang === "de" ? "de-DE" : "en-GB", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+      $$("[data-share]").forEach((el) => {
+        el.style.width = share[el.dataset.share] + "%";
+        if (el.textContent) el.textContent = fmt(share[el.dataset.share]);
+      });
+      $$("[data-share-label]").forEach((el) => (el.textContent = fmt(share[el.dataset.shareLabel])));
+    }
+
     // Spending by category
     const list = $("[data-categories]");
     if (list) {
