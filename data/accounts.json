@@ -56,7 +56,7 @@
       "notes": [
         {
           "en": "The school's bank charges about €7 per incoming transfer, and your bank may charge an international fee too – best for larger amounts.",
-          "de": "Die Bank der Schule verlangt rund 7 € pro eingehender Überweisung, dazu kommen evtl. Auslandsgebühren deiner Bank – am besten für grössere Beträge."
+          "de": "Die Bank der Schule verlangt rund 7 € pro eingehender Überweisung, dazu kommen evtl. Auslandsgebühren deiner Bank – am besten für größere Beträge."
         }
       ],
       "warn": true
@@ -135,7 +135,7 @@
       "notes": [
         {
           "en": "SEPA transfers in euros are usually free or very cheap from any European bank. From outside the European Economic Area, your bank may also ask for the intermediary BIC CHASDEFX.",
-          "de": "SEPA-Überweisungen in Euro sind bei europäischen Banken meist kostenlos oder sehr günstig. Von ausserhalb des EWR fragt deine Bank evtl. nach der Zwischenbank-BIC CHASDEFX."
+          "de": "SEPA-Überweisungen in Euro sind bei europäischen Banken meist kostenlos oder sehr günstig. Von außerhalb des EWR fragt deine Bank evtl. nach der Zwischenbank-BIC CHASDEFX."
         }
       ],
       "viaPartner": true
@@ -158,7 +158,7 @@
       ],
       "method": {
         "en": "Domestic transfer in Swiss francs",
-        "de": "Inlandüberweisung in Franken"
+        "de": "Inlandsüberweisung in Franken"
       },
       "fields": [
         {
@@ -186,7 +186,7 @@
       "notes": [
         {
           "en": "Important: Swiss transfers go through Revolut's Swiss collection account, so the reference must be exactly “Sustainable Integration GmbH, CH” – otherwise the transfer fails. Please don't add anything else.",
-          "de": "Wichtig: Inlandüberweisungen laufen über das Schweizer Sammelkonto von Revolut. Der Verwendungszweck muss deshalb genau „Sustainable Integration GmbH, CH“ lauten – sonst scheitert die Überweisung. Bitte nichts ergänzen."
+          "de": "Wichtig: Inlandsüberweisungen laufen über das Schweizer Sammelkonto von Revolut. Der Verwendungszweck muss deshalb genau „Sustainable Integration GmbH, CH“ lauten – sonst scheitert die Überweisung. Bitte nichts ergänzen."
         }
       ],
       "warn": true,
@@ -196,7 +196,7 @@
       "id": "uk",
       "label": {
         "en": "United Kingdom",
-        "de": "Grossbritannien"
+        "de": "Großbritannien"
       },
       "sub": {
         "en": "GBP",
@@ -414,11 +414,11 @@
       "notes": [
         {
           "en": "Same address for ETH and USDC on Ethereum and Base (Base has the lowest fees). Please double-check address and network – crypto transfers cannot be reversed. The wallet belongs to Straight Training Center.",
-          "de": "Gleiche Adresse für ETH und USDC auf Ethereum und Base (Base hat die tiefsten Gebühren). Bitte Adresse und Netzwerk doppelt prüfen – Krypto-Transaktionen lassen sich nicht rückgängig machen. Die Wallet gehört dem Straight Training Center."
+          "de": "Gleiche Adresse für ETH und USDC auf Ethereum und Base (Base hat die niedrigsten Gebühren). Bitte Adresse und Netzwerk doppelt prüfen – Krypto-Transaktionen lassen sich nicht rückgängig machen. Die Wallet gehört dem Straight Training Center."
         },
         {
           "en": "You may notice earlier transactions on this address: in 2025 it received about $2,000 from Logos Circle Zanzibar for our 10 computers – documented in the computer report under “We've done this before”. Crypto donations for the building are booked in the construction ledger.",
-          "de": "Auf dieser Adresse siehst du frühere Transaktionen: 2025 gingen hier rund 2'000 $ von Logos Circle Zanzibar für unsere 10 Computer ein – dokumentiert im Computer-Bericht unter „Das haben wir schon einmal geschafft“. Krypto-Spenden für den Bau werden in der Baubuchhaltung verbucht."
+          "de": "Auf dieser Adresse siehst du frühere Transaktionen: 2025 gingen hier rund 2.000 $ von Logos Circle Zanzibar für unsere 10 Computer ein – dokumentiert im Computer-Bericht unter „Das haben wir schon einmal geschafft“. Krypto-Spenden für den Bau werden in der Baubuchhaltung verbucht."
         }
       ],
       "warn": true
@@ -460,7 +460,7 @@
         },
         {
           "en": "You may notice earlier transactions on this address: in 2025 it received about $2,000 from Logos Circle Zanzibar for our 10 computers – documented in the computer report under “We've done this before”. Crypto donations for the building are booked in the construction ledger.",
-          "de": "Auf dieser Adresse siehst du frühere Transaktionen: 2025 gingen hier rund 2'000 $ von Logos Circle Zanzibar für unsere 10 Computer ein – dokumentiert im Computer-Bericht unter „Das haben wir schon einmal geschafft“. Krypto-Spenden für den Bau werden in der Baubuchhaltung verbucht."
+          "de": "Auf dieser Adresse siehst du frühere Transaktionen: 2025 gingen hier rund 2.000 $ von Logos Circle Zanzibar für unsere 10 Computer ein – dokumentiert im Computer-Bericht unter „Das haben wir schon einmal geschafft“. Krypto-Spenden für den Bau werden in der Baubuchhaltung verbucht."
         }
       ],
       "warn": true

@@ -5,7 +5,7 @@
   if (!root) return;
   const lang = document.documentElement.lang === "de" ? "de" : "en";
   const base = document.documentElement.dataset.base || "";
-  const locale = lang === "de" ? "de-CH" : "en-GB";
+  const locale = lang === "de" ? "de-DE" : "en-GB";
 
   const L = {
     en: {
