@@ -8,7 +8,7 @@
     en: {
       of: (goal) => `raised and promised of ${goal}`,
       received: "received",
-      committed: "promised",
+      stillPending: (v) => `of which ${v} still to arrive`,
       spent: "spent – every receipt is public",
       nextTitle: (gap, phase) => `${gap} still needed to fully fund ${phase}`,
       phase: (id) => `phase ${id}`,
@@ -22,7 +22,7 @@
     de: {
       of: (goal) => `gespendet und zugesagt von ${goal}`,
       received: "eingegangen",
-      committed: "zugesagt",
+      stillPending: (v) => `davon ${v} noch ausstehend`,
       spent: "ausgegeben – alle Belege öffentlich",
       nextTitle: (gap, phase) => `Noch ${gap}, um ${phase} voll zu finanzieren`,
       phase: (id) => `Phase ${id}`,
@@ -40,12 +40,11 @@
   const date = (s) => new Date(s).toLocaleDateString(lang === "de" ? "de-DE" : "en-GB", { day: "numeric", month: "long", year: "numeric" });
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-  const sum = (o) => Object.values(o || {}).reduce((a, b) => a + b, 0);
   const pct = (a, b) => (b > 0 ? Math.max(0, Math.min(100, (a / b) * 100)) : 0);
 
   // ---------- progress ----------
   Promise.all([
-    fetch(base + "data/config.json").then((r) => r.json()),
+    fetch(base + "data/config.json", { cache: "no-cache" }).then((r) => r.json()),
     fetch(base + "data/progress.json", { cache: "no-cache" }).then((r) => r.json()),
   ])
     .then(([cfg, prog]) => render(cfg, prog))
@@ -53,10 +52,13 @@
 
   function render(cfg, prog) {
     const rate = cfg.tsPerEur;
-    const committed = sum(prog.donorsTS) / rate;
-    const pledged = sum(prog.pledgedTS) / rate;
+    // Ledger amounts per currency: EUR counts as EUR, TS (= 1'000 TZS) is converted at the budget rate
+    const toEur = (inv) => (inv.EUR || 0) + (inv.TS || 0) / rate;
+    const total = (accounts) => Object.values(accounts || {}).reduce((a, inv) => a + toEur(inv), 0);
+    const committed = total(prog.donors);
+    const pledged = total(prog.pending);
     const received = committed - pledged;
-    const spent = sum(prog.expensesTS) / rate;
+    const spent = total(prog.expenses);
     const goal = cfg.phases.reduce((a, p) => a + p.cost, 0);
 
     $$("[data-goal]").forEach((el) => (el.textContent = eur.format(goal)));
@@ -96,6 +98,13 @@
       li.classList.toggle("is-next", next === p);
     });
 
+    // Money still missing up to and including a given phase, e.g. <b data-gap-until="1c">
+    $$("[data-gap-until]").forEach((el) => {
+      const upto = cfg.phases.findIndex((p) => p.id === el.dataset.gapUntil);
+      const gap = cfg.phases.slice(0, upto + 1).reduce((a, p) => a + p.cost - p.funded, 0);
+      el.textContent = eurx(gap);
+    });
+
     const nm = $("[data-next-milestone]");
     if (nm) {
       if (next) {
@@ -111,15 +120,14 @@
     // Spending by category
     const list = $("[data-categories]");
     if (list) {
-      const total = sum(prog.expensesTS);
       list.innerHTML = "";
-      Object.entries(prog.expensesTS).forEach(([acc, ts]) => {
+      Object.entries(prog.expenses).forEach(([acc, inv]) => {
         const label = (cfg.expenseCategories[acc] || {})[lang] || acc;
         const row = document.createElement("div");
         row.className = "cat-row";
-        row.innerHTML = `<span>${label}</span><b>${eurx(ts / rate)}</b><div class="bar"><i></i></div>`;
+        row.innerHTML = `<span>${label}</span><b>${eurx(toEur(inv))}</b><div class="bar"><i></i></div>`;
         list.appendChild(row);
-        requestAnimationFrame(() => ($("i", row).style.width = pct(ts, total) + "%"));
+        requestAnimationFrame(() => ($("i", row).style.width = pct(toEur(inv), spent) + "%"));
       });
     }
 
@@ -127,15 +135,18 @@
     const donors = $("[data-donors]");
     if (donors) {
       donors.innerHTML = "";
-      Object.entries(prog.donorsTS)
-        .sort((a, b) => b[1] - a[1])
-        .forEach(([acc, ts]) => {
+      Object.entries(prog.donors)
+        .sort((a, b) => toEur(b[1]) - toEur(a[1]))
+        .forEach(([acc, inv]) => {
           const d = cfg.donors[acc] || { name: acc.split(":").pop() };
-          const pl = (prog.pledgedTS || {})["A:Pledged:" + acc.split(":").pop()] || 0;
+          const key = acc.split(":").pop();
+          const pl = Object.entries(prog.pending || {})
+            .filter(([p]) => p.split(":").pop() === key)
+            .reduce((a, [, v]) => a + toEur(v), 0);
           const row = document.createElement("div");
           row.className = "cat-row";
-          row.innerHTML = `<span>${d.name}</span><b>${eurx(ts / rate)}</b>` +
-            (pl ? `<span class="small muted">${eurx(pl / rate)} ${T.committed}</span>` : "");
+          row.innerHTML = `<span>${d.name}</span><b>${eurx(toEur(inv))}</b>` +
+            (pl ? `<span class="small muted">${T.stillPending(eurx(pl))}</span>` : "");
           donors.appendChild(row);
         });
     }

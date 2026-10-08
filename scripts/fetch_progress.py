@@ -5,17 +5,19 @@ Run from the donate-site folder:  python scripts/fetch_progress.py
 (GitHub Actions runs this every night, see .github/workflows/update-progress.yml)
 
 Ledger conventions this relies on:
-  Q:*          one equity account per donor or channel (credits = donations, incl. pledges)
-  A:Pledged:*  promised money that has not arrived yet (asset / receivable)
-  E:*          construction expenses; the second level (E:M, E:F, ...) is the category
-Amounts in the ledger are in TS (= 1'000 TZS).
+  Q:*                    one equity account per donor or channel (credits = donations, incl. pledges)
+  A:Pending:* / A:Pledged:*   promised money that has not arrived yet
+  E:*                    construction expenses; the second level (E:M, E:F, ...) is the category
+Amounts are kept per currency (e.g. EUR and TS, where TS = 1'000 TZS); the website
+counts EUR as EUR and converts TS with tsPerEur from data/config.json.
 """
-import json, os, sys, urllib.parse, urllib.request
+import json, os, re, sys, urllib.parse, urllib.request
 from datetime import datetime, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 CONFIG = json.load(open(os.path.join(ROOT, "data", "config.json"), encoding="utf8"))
+PENDING = CONFIG.get("pendingAccounts", "^A:(Pending|Pledged):")
 
 
 def query(bql):
@@ -24,35 +26,31 @@ def query(bql):
         return json.load(r)["data"]["rows"]
 
 
-def ts_of(inventory):
-    """Value of a Fava inventory in TS. Non-TS units (e.g. EUR held at cost) are
-    taken at their cost, which the query returns via cost()."""
-    return sum(v for k, v in inventory.items() if k == "TS")
+def add(target, key, inventory, sign=1):
+    """Accumulate a Fava inventory {currency: amount} into target[key], rounded."""
+    bucket = target.setdefault(key, {})
+    for cur, amount in (inventory or {}).items():
+        bucket[cur] = round(bucket.get(cur, 0) + sign * amount, 2)
 
 
 def main():
-    donors = {}
-    for account, inv in query("SELECT account, cost(sum(position)) WHERE account ~ '^Q:' GROUP BY account"):
-        donors[account] = -ts_of(inv)
-
-    pledged = {}
-    for account, inv in query("SELECT account, cost(sum(position)) WHERE account ~ '^A:Pledged' GROUP BY account"):
-        pledged[account] = ts_of(inv)
-
-    expenses = {}
-    for account, inv in query("SELECT account, cost(sum(position)) WHERE account ~ '^E:' GROUP BY account"):
-        cat = ":".join(account.split(":")[:2])
-        expenses[cat] = expenses.get(cat, 0) + ts_of(inv)
+    donors, pending, expenses = {}, {}, {}
+    for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^Q:' GROUP BY account"):
+        add(donors, account, inv, sign=-1)          # equity is credited, so flip the sign
+    for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^A:' GROUP BY account"):
+        if re.match(PENDING, account):
+            add(pending, account, inv)
+    for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^E:' GROUP BY account"):
+        add(expenses, ":".join(account.split(":")[:2]), inv)
 
     last = query("SELECT max(date)")[0][0]
-
     out = {
-        "unit": "TS",
         "fetchedAt": datetime.now(timezone.utc).isoformat(timespec="minutes"),
         "lastEntry": last,
-        "donorsTS": {k: round(v, 2) for k, v in donors.items()},
-        "pledgedTS": {k: round(v, 2) for k, v in pledged.items()},
-        "expensesTS": {k: round(v, 2) for k, v in sorted(expenses.items(), key=lambda x: -x[1])},
+        "note": "Amounts per currency; TS = 1'000 TZS.",
+        "donors": donors,
+        "pending": pending,
+        "expenses": dict(sorted(expenses.items(), key=lambda kv: -sum(kv[1].values()))),
     }
     path = os.path.join(ROOT, "data", "progress.json")
     with open(path, "w", encoding="utf8") as f:
