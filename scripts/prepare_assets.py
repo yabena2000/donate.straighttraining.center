@@ -1,4 +1,4 @@
-﻿"""One-off asset preparation: resizes source photos/logos from the shared
+"""One-off asset preparation: resizes source photos/logos from the shared
 'Material COPIES' folder into web-sized files under assets/.
 Run from the donate-site folder:  python scripts/prepare_assets.py
 """
@@ -62,6 +62,8 @@ def main():
     for src, dst in [("stc logo.jpeg", "stc.jpg"), ("dsfa.jpeg", "dsfa.jpg"),
                      ("modest tour logo.jpeg", "modest-tour.jpg"), ("zanzibarcamp.jpeg", "zanzibar-camp.jpg")]:
         im = Image.open(os.path.join(L, src)).convert("RGB")
+        if dst == "zanzibar-camp.jpg":
+            im = im.crop((0, 2, im.width, im.height))  # source has a grey line in its top pixel row
         if im.width > 600:
             im = im.resize((600, round(im.height * 600 / im.width)), Image.LANCZOS)
         im.save(os.path.join(logos, dst), quality=88)
