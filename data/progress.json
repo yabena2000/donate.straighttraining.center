@@ -1,15 +1,16 @@
 {
   "unit": "TS",
-  "fetchedAt": "2026-10-07T15:43+00:00",
-  "lastEntry": "2026-09-22",
+  "fetchedAt": "2026-10-08T03:52+00:00",
+  "lastEntry": "2026-10-06",
   "donorsTS": {
-    "Q:DSFAEV": 27033.45
+    "Q:DSFAEV": 66500.2
   },
   "pledgedTS": {},
   "expensesTS": {
     "E:M": 20081.6,
     "E:F": 12487,
     "E:Gov": 3774,
-    "E:T": 1372
+    "E:T": 1372,
+    "E:Fees": 170.0
   }
 }
