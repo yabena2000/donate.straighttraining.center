@@ -1,5 +1,5 @@
 {
-  "_comment": "Edit this file to change the goal, phase statuses or donor names. Amounts in EUR. Ledger amounts in EUR count as EUR; amounts in TS (= 1,000 TZS) are converted at tsPerEur. status: done | building | next | planned. pendingAccounts: ledger accounts holding promised money that has not arrived yet.",
+  "_comment": "Edit this file to change the goal, phase statuses or donor names. Amounts in EUR. Ledger amounts in EUR count as EUR; amounts in TZS are converted at tsPerEur (thousand TZS per EUR, so 3.0 = 3,000 TZS). status: done | building | next | planned. pendingAccounts: ledger accounts holding promised money that has not arrived yet.",
   "ledgerUrl": "https://construction.straighttraining.center",
   "ledgerApi": "https://construction.straighttraining.center/straight-training-center-construction-beancount-2026/api/query",
   "tsPerEur": 3.0,
@@ -46,32 +46,32 @@
     }
   ],
   "donors": {
-    "Q:DSFAEV": {
+    "Equity:DSFAEV": {
       "name": "Dein Stern für Afrika e.V.",
       "url": "https://www.stern-fuer-afrika.de"
     }
   },
   "expenseCategories": {
-    "E:M": {
+    "Expenses:Material": {
       "en": "Materials",
       "de": "Material"
     },
-    "E:F": {
+    "Expenses:Fundi": {
       "en": "Craftsmen (fundis)",
       "de": "Handwerker (Fundis)"
     },
-    "E:Gov": {
+    "Expenses:Government": {
       "en": "Permits & government",
       "de": "Genehmigungen & Behörden"
     },
-    "E:T": {
+    "Expenses:Transport": {
       "en": "Transport",
       "de": "Transport"
     },
-    "E:Fees": {
+    "Expenses:Fees": {
       "en": "Bank fees",
       "de": "Bankgebühren"
     }
   },
-  "pendingAccounts": "^A:(Pending|Pledged):"
+  "pendingAccounts": "^Assets:(Pending|Pledged):"
 }

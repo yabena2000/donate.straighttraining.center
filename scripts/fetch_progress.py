@@ -5,11 +5,11 @@ Run from the donate-site folder:  python scripts/fetch_progress.py
 (GitHub Actions runs this every night, see .github/workflows/update-progress.yml)
 
 Ledger conventions this relies on:
-  Q:*                    one equity account per donor or channel (credits = donations, incl. pledges)
-  A:Pending:* / A:Pledged:*   promised money that has not arrived yet
-  E:*                    construction expenses; the second level (E:M, E:F, ...) is the category
-Amounts are kept per currency (e.g. EUR and TS, where TS = 1'000 TZS); the website
-counts EUR as EUR and converts TS with tsPerEur from data/config.json.
+  Equity:*                          one account per donor or channel (credits = donations, incl. pledges)
+  Assets:Pending:* / Assets:Pledged:*   promised money that has not arrived yet
+  Expenses:*                        construction expenses; the second level (Expenses:Material, ...) is the category
+Amounts are kept per currency (EUR and TZS); the website counts EUR as EUR and
+converts TZS with tsPerEur (thousand TZS per EUR) from data/config.json.
 """
 import json, os, re, sys, urllib.parse, urllib.request
 from datetime import datetime, timezone
@@ -17,7 +17,7 @@ from datetime import datetime, timezone
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 CONFIG = json.load(open(os.path.join(ROOT, "data", "config.json"), encoding="utf8"))
-PENDING = CONFIG.get("pendingAccounts", "^A:(Pending|Pledged):")
+PENDING = CONFIG.get("pendingAccounts", "^Assets:(Pending|Pledged):")
 
 
 def query(bql):
@@ -35,19 +35,19 @@ def add(target, key, inventory, sign=1):
 
 def main():
     donors, pending, expenses = {}, {}, {}
-    for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^Q:' GROUP BY account"):
+    for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^Equity:' GROUP BY account"):
         add(donors, account, inv, sign=-1)          # equity is credited, so flip the sign
-    for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^A:' GROUP BY account"):
+    for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^Assets:' GROUP BY account"):
         if re.match(PENDING, account):
             add(pending, account, inv)
-    for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^E:' GROUP BY account"):
+    for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^Expenses:' GROUP BY account"):
         add(expenses, ":".join(account.split(":")[:2]), inv)
 
     last = query("SELECT max(date)")[0][0]
     out = {
         "fetchedAt": datetime.now(timezone.utc).isoformat(timespec="minutes"),
         "lastEntry": last,
-        "note": "Amounts per currency; TS = 1'000 TZS.",
+        "note": "Amounts per currency.",
         "donors": donors,
         "pending": pending,
         "expenses": dict(sorted(expenses.items(), key=lambda kv: -sum(kv[1].values()))),
