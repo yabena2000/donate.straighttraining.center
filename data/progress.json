@@ -1,33 +1,8 @@
 {
-  "fetchedAt": "2026-10-08T03:54+00:00",
+  "fetchedAt": "2026-10-09T07:53+00:00",
   "lastEntry": "2026-10-06",
   "note": "Amounts per currency; TS = 1'000 TZS.",
-  "donors": {
-    "Q:DSFAEV": {
-      "EUR": 23000,
-      "TS": 2100.2
-    }
-  },
-  "pending": {
-    "A:Pending:DSFAEV": {
-      "EUR": 5700
-    }
-  },
-  "expenses": {
-    "E:M": {
-      "TS": 20081.6
-    },
-    "E:F": {
-      "TS": 12487
-    },
-    "E:Gov": {
-      "TS": 3774
-    },
-    "E:T": {
-      "TS": 1372
-    },
-    "E:Fees": {
-      "TS": 170.0
-    }
-  }
+  "donors": {},
+  "pending": {},
+  "expenses": {}
 }
