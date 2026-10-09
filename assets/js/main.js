@@ -52,8 +52,8 @@
 
   function render(cfg, prog) {
     const rate = cfg.tsPerEur;
-    // Ledger amounts per currency: EUR counts as EUR, TS (= 1'000 TZS) is converted at the budget rate
-    const toEur = (inv) => (inv.EUR || 0) + (inv.TS || 0) / rate;
+    // Ledger amounts per currency: EUR counts as EUR, TZS is converted at the budget rate (rate = thousand TZS per EUR)
+    const toEur = (inv) => (inv.EUR || 0) + (inv.TZS || 0) / 1000 / rate + (inv.TS || 0) / rate;
     const total = (accounts) => Object.values(accounts || {}).reduce((a, inv) => a + toEur(inv), 0);
     const committed = total(prog.donors);
     const pledged = total(prog.pending);
@@ -119,7 +119,7 @@
 
     // Where the money goes: everything spent is building cost except bank fees
     if (spent > 0) {
-      const fees = toEur(prog.expenses["E:Fees"] || {}) / spent * 100;
+      const fees = toEur(prog.expenses["Expenses:Fees"] || {}) / spent * 100;
       const share = { build: 100 - fees, fees };
       const fmt = (v) => v.toLocaleString(lang === "de" ? "de-DE" : "en-GB", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
       $$("[data-share]").forEach((el) => {
