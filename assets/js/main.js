@@ -193,32 +193,15 @@
       });
     });
   }
+  // The system share sheet only on phones/tablets; desktop browsers often fail silently
   const nativeBtn = $("[data-share-native]");
-  if (nativeBtn && navigator.share) {
+  if (nativeBtn && navigator.share && matchMedia("(pointer: coarse)").matches) {
     nativeBtn.hidden = false;
     nativeBtn.addEventListener("click", () =>
-      navigator.share({ title: document.title, url: copyBtn ? copyBtn.dataset.url : location.href }).catch(() => {})
+      navigator.share({ title: document.title, url: copyBtn ? copyBtn.dataset.url : location.href }).catch((e) => {
+        if (e.name !== "AbortError" && copyBtn) copyBtn.click(); // fall back to copying the link
+      })
     );
-  }
-
-  // ---------- newsletter: translate the Infomaniak form into the page language ----------
-  const nl = $(".newsletter-form");
-  if (nl) {
-    const N = {
-      en: { labels: ["Email", "First name (optional)"], submit: "Subscribe",
-            ok: "Almost done! Please check your inbox and click the link in the confirmation email.",
-            privacy: "We send the newsletter with Infomaniak (Switzerland). Your email address is stored there, used only for this newsletter, and every email has a link to unsubscribe." },
-      de: { labels: ["E-Mail", "Vorname (optional)"], submit: "Abonnieren",
-            ok: "Fast geschafft! Bitte bestätige deine Anmeldung über den Link in der E-Mail, die wir dir gerade geschickt haben.",
-            privacy: "Wir versenden den Newsletter mit Infomaniak (Schweiz). Deine E-Mail-Adresse wird dort gespeichert, nur für diesen Newsletter verwendet, und jede E-Mail enthält einen Abmeldelink." },
-    }[lang];
-    $$(".inf-input label", nl).forEach((l, i) => N.labels[i] && (l.textContent = N.labels[i]));
-    const sub = $(".inf-submit input", nl);
-    if (sub) sub.value = N.submit;
-    const ok = $(".inf-success h4", nl);
-    if (ok) ok.textContent = N.ok;
-    const pr = $(".inf-rgpd", nl);
-    if (pr) pr.textContent = N.privacy;
   }
 
   // ---------- diary scroll buttons ----------

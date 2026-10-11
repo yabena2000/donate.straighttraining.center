@@ -388,22 +388,6 @@ blockquote cite { display: block; margin-top: 10px; font: italic .9rem var(--san
 @media (min-width: 701px) { .stats ul { grid-template-columns: repeat(5, 1fr); } }
 .rain-note { margin: 10px 0 0; font-size: .88rem; font-weight: 600; color: var(--brick-dark); }
 
-/* Newsletter (Infomaniak web form, restyled) */
-.newsletter { display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; align-items: start; background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; margin-top: 40px; }
-.newsletter h3 { margin: 0 0 8px; color: var(--ink); }
-.newsletter p { margin: 0; color: var(--muted); }
-.newsletter-form .inf-form > div[class^="inf-main_"] { background: none; padding: 0; margin: 0; }
-.newsletter-form div[class^="inf-main_"] > h4, .newsletter-form div[class^="inf-main_"] > span { display: none; }
-.newsletter-form div[class^="inf-main_"] .inf-content { margin-top: 0; }
-.newsletter-form div[class^="inf-main_"] label { font: 600 .9rem var(--sans); color: var(--ink); text-transform: capitalize; margin-bottom: 4px; }
-.newsletter-form div[class^="inf-main_"] .inf-input { margin-bottom: 12px; }
-.newsletter-form div[class^="inf-main_"] .inf-input input { height: 44px; border: 1px solid var(--line); border-radius: 10px; padding: 0 12px; font: 400 1rem var(--sans); color: var(--ink); background: var(--paper); }
-.newsletter-form div[class^="inf-main_"] .inf-input input:focus { outline: 2px solid var(--brick); outline-offset: 1px; }
-.newsletter-form .inf-rgpd { margin: 4px 0 8px; font-size: .82rem; color: var(--muted); }
-.newsletter-form div[class^="inf-main_"] .inf-submit { text-align: left; }
-.newsletter-form div[class^="inf-main_"] .inf-submit input { margin-top: 8px !important; background: var(--brick); color: var(--white); border-radius: 999px; padding: .7em 1.6em; font: 600 1rem var(--sans); cursor: pointer; text-transform: capitalize; }
-.newsletter-form div[class^="inf-main_"] .inf-submit input:hover { background: var(--brick-dark); }
-@media (max-width: 760px) { .newsletter { grid-template-columns: 1fr; gap: 16px; padding: 22px; } }
 
 /* Share */
 .share-link { display: block; text-align: center; margin-top: 10px; font-size: .9rem; color: var(--muted); }
