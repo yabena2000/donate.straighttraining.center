@@ -41,6 +41,7 @@
 
   const eur = new Intl.NumberFormat(lang === "de" ? "de-DE" : "en-IE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
   const eurx = (v) => eur.format(v) + "*"; // converted from shillings
+  const fmt = (v, converted) => (converted ? eurx(v) : eur.format(v)); // * only if shillings are part of it
   const date = (s) => new Date(s).toLocaleDateString(lang === "de" ? "de-DE" : "en-GB", { day: "numeric", month: "long", year: "numeric" });
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
@@ -59,6 +60,9 @@
     // Ledger amounts per currency: EUR counts as EUR, TZS is converted at the budget rate (rate = thousand TZS per EUR)
     const toEur = (inv) => (inv.EUR || 0) + (inv.TZS || 0) / 1000 / rate + (inv.TS || 0) / rate;
     const total = (accounts) => Object.values(accounts || {}).reduce((a, inv) => a + toEur(inv), 0);
+    // true if any of these ledger amounts contains shillings, i.e. was converted at the budget rate
+    const conv = (...invs) => invs.some((i) => i && ((i.TZS || 0) !== 0 || (i.TS || 0) !== 0));
+    const donorsX = conv(...Object.values(prog.donors || {}), ...Object.values(prog.pending || {}));
     const committed = total(prog.donors);
     const pledged = total(prog.pending);
     const received = committed - pledged;
@@ -66,9 +70,9 @@
     const goal = cfg.phases.reduce((a, p) => a + p.cost, 0);
 
     $$("[data-goal]").forEach((el) => (el.textContent = eur.format(goal)));
-    $$("[data-committed]").forEach((el) => (el.textContent = eurx(committed)));
-    $$("[data-received]").forEach((el) => (el.textContent = eurx(received)));
-    $$("[data-spent]").forEach((el) => (el.textContent = eurx(spent)));
+    $$("[data-committed]").forEach((el) => (el.textContent = fmt(committed, donorsX)));
+    $$("[data-received]").forEach((el) => (el.textContent = fmt(received, donorsX)));
+    $$("[data-spent]").forEach((el) => (el.textContent = fmt(spent, conv(...Object.values(prog.expenses || {})))));
     $$("[data-of-goal]").forEach((el) => (el.textContent = T.of(eur.format(goal))));
     $$("[data-pct]").forEach((el) => (el.textContent = Math.round(pct(committed, goal)) + " %"));
     $$("[data-rate-note]").forEach((el) => (el.textContent = T.eurNote((rate * 1000).toLocaleString(lang === "de" ? "de-DE" : "en-GB"))));
@@ -96,7 +100,7 @@
       const badge = $(".badge", li);
       badge.className = "badge " + p.status;
       badge.textContent = T.status[p.status];
-      $(".funded", li).textContent = eurx(p.funded) + " " + T.funded;
+      $(".funded", li).textContent = fmt(p.funded, donorsX) + " " + T.funded;
       $(".cost", li).textContent = T.ofCost(eur.format(p.cost));
       requestAnimationFrame(() => ($(".bar i", li).style.width = pct(p.funded, p.cost) + "%"));
       li.classList.toggle("is-next", next === p);
@@ -106,7 +110,7 @@
     $$("[data-gap-until]").forEach((el) => {
       const upto = cfg.phases.findIndex((p) => p.id === el.dataset.gapUntil);
       const gap = cfg.phases.slice(0, upto + 1).reduce((a, p) => a + p.cost - p.funded, 0);
-      el.textContent = eurx(gap);
+      el.textContent = fmt(gap, donorsX);
     });
 
     // A pledge that is only paid once a phase is built: show the cash needed now to build it
@@ -118,14 +122,17 @@
 
     const nm = $("[data-next-milestone]");
     if (nm) {
-      if (unPhase && unPhase.status !== "done" && unPending > 0 && needNow > 0) {
+      const unlockActive = unPhase && unPhase.status !== "done" && unPending > 0 && needNow > 0;
+      const rain = $(".rain", nm);
+      if (rain) rain.hidden = !unlockActive;
+      if (unlockActive) {
         const donor = cfg.donors[un.donor] || {};
         const dname = typeof donor.name === "object" ? donor.name[lang] : donor.name || "";
-        $("strong", nm).textContent = T.unlockTitle(un.label[lang], eurx(needNow));
+        $("strong", nm).textContent = T.unlockTitle(un.label[lang], fmt(needNow, conv(prog.cash, prog.liabilities)));
         $("span", nm).textContent = T.unlockText(dname.replace(/ e\.V\.$/, ""), eur.format(unPending));
       } else if (next) {
         const name = $(`.phase[data-phase="${next.id}"] h3`);
-        $("strong", nm).textContent = T.nextTitle(eurx(next.cost - next.funded), T.phase(next.id));
+        $("strong", nm).textContent = T.nextTitle(fmt(next.cost - next.funded, donorsX), T.phase(next.id));
         $("span", nm).textContent = name ? name.dataset.short || name.firstChild.textContent.trim() : "";
       } else {
         $("strong", nm).textContent = T.allFunded;
@@ -155,7 +162,7 @@
         const label = (cfg.expenseCategories[acc] || {})[lang] || acc;
         const row = document.createElement("div");
         row.className = "cat-row";
-        row.innerHTML = `<span>${label}</span><b>${eurx(toEur(inv))}</b><div class="bar"><i></i></div>`;
+        row.innerHTML = `<span>${label}</span><b>${fmt(toEur(inv), conv(inv))}</b><div class="bar"><i></i></div>`;
         list.appendChild(row);
         requestAnimationFrame(() => ($("i", row).style.width = pct(toEur(inv), spent) + "%"));
       });
@@ -175,8 +182,8 @@
             .reduce((a, [, v]) => a + toEur(v), 0);
           const row = document.createElement("div");
           row.className = "cat-row";
-          row.innerHTML = `<span>${typeof d.name === "object" ? d.name[lang] : d.name}</span><b>${eurx(toEur(inv))}</b>` +
-            (pl ? `<span class="small muted">${T.stillPending(eurx(pl))}</span>` : "");
+          row.innerHTML = `<span>${typeof d.name === "object" ? d.name[lang] : d.name}</span><b>${fmt(toEur(inv), conv(inv))}</b>` +
+            (pl ? `<span class="small muted">${T.stillPending(eur.format(pl))}</span>` : "");
           donors.appendChild(row);
         });
     }

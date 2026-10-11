@@ -123,6 +123,8 @@ section { padding: 88px 0; }
   font-size: .95rem; border-left: 4px solid var(--gold);
 }
 .next-milestone strong { display: block; font-size: 1.05rem; }
+.next-milestone .rain { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); font-style: normal; font-size: .88rem; color: var(--brick-dark); }
+.next-milestone .rain[hidden] { display: none; }
 .progress-card .btn { width: 100%; margin-top: 16px; }
 .source-note { font-size: .78rem; color: var(--muted); margin-top: 12px; }
 
@@ -386,7 +388,6 @@ blockquote cite { display: block; margin-top: 10px; font: italic .9rem var(--san
 @media (max-width: 760px) { .overhead-grid { grid-template-columns: 1fr; gap: 28px; } }
 @media (max-width: 700px) { .stats li:last-child { grid-column: 1 / -1; } }
 @media (min-width: 701px) { .stats ul { grid-template-columns: repeat(5, 1fr); } }
-.rain-note { margin: 10px 0 0; font-size: .88rem; font-weight: 600; color: var(--brick-dark); }
 
 
 /* Share */
