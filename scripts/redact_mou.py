@@ -1,15 +1,22 @@
 """Creates the web version of the signed MoU with personal data covered:
 handwritten signatures, ID numbers, dates of birth, phone numbers and home addresses.
 Names, dates, amounts and all other content stay readable. Original metadata is kept.
+Pages with official documents (registration, licence, purchase contract) are stamped
+"ONLINE COPY - NOT VALID FOR OFFICIAL USE" and flattened to images, so the stamp
+cannot be removed from the PDF.
 Coordinates are PDF points (1/72 inch), measured on the source document.
 Run from the donate-site folder:  python scripts/redact_mou.py
 """
+import math
+import sys
 import pymupdf
 
 SRC = r"..\Material COPIES\STC SfA contract 2026-07-13 final signed.pdf"
 OUT = r"assets\docs\STC-dSfA-MoU-2026-07-13.pdf"
 LOGO_XREF = 11   # page header logo, present on every page – never touched
 SIG = "signature removed"
+STAMPED = [2, 3, 4, 12, 13, 14, 15, 16]   # BPRA certificate, BPRA form, business licence, purchase contract
+OUT_DPI = 110
 
 BOXES = {
     # p.3 – BPRA registration form of STC: ID numbers, dates of birth, phone numbers, home addresses
@@ -59,11 +66,51 @@ def note_box(page, rect, text):
 
 note_box(sig_page, pymupdf.Rect(290, 672, 495, 712),
          "Online version: handwritten signatures have been removed. The signed original is available on request.")
-note_box(doc[2], pymupdf.Rect(340, 700, 540, 740),
-         "Online version: ID numbers, dates of birth, phone numbers and home addresses have been covered.")
-note_box(doc[11], pymupdf.Rect(340, 735, 540, 775),
-         "Online version: ID numbers, phone numbers and signatures in this contract have been covered.")
+STAMP_NOTE = ("ONLINE COPY - NOT VALID FOR OFFICIAL USE. Published for transparency only; "
+              "not proof of registration, licence or ownership. Originals are held by Straight Training Center.")
+EXTRA = {3: " ID numbers, dates of birth, phone numbers and home addresses have been covered.",
+         12: " ID numbers, phone numbers and signatures in this contract have been covered."}
 
+
+def stamp(page, note):
+    """Big diagonal stamp across the scanned document plus a red note below it."""
+    r = page.rect
+    imgs = [q for x in page.get_images(full=True) for q in page.get_image_rects(x[0])]
+    doc_r = max(imgs, key=lambda q: q.width * q.height)   # the scan; the header logo is small
+    angle = math.degrees(math.atan2(doc_r.height, doc_r.width))
+    centre = pymupdf.Point((doc_r.x0 + doc_r.x1) / 2, (doc_r.y0 + doc_r.y1) / 2)
+    diag = math.hypot(doc_r.width, doc_r.height)
+    lines = ("ONLINE COPY", "NOT VALID FOR OFFICIAL USE")
+    s1, s2 = (min(cap, diag * 0.85 / pymupdf.get_text_length(t, fontname="hebo", fontsize=1))
+              for t, cap in zip(lines, (90, 48)))
+    for text, size, dy in ((lines[0], s1, -s2 * 0.35), (lines[1], s2, s2 * 1.05)):
+        w = pymupdf.get_text_length(text, fontname="hebo", fontsize=size)
+        page.insert_text(pymupdf.Point(centre.x - w / 2, centre.y + dy), text, fontname="hebo",
+                         fontsize=size, color=RED, fill_opacity=0.4, stroke_opacity=0.4,
+                         morph=(centre, pymupdf.Matrix(-angle)))
+    h = 46 if len(note) > 160 else 38
+    top = doc_r.y1 + 6 if doc_r.y1 + 6 + h < r.height - 70 else doc_r.y1 - h - 6
+    box = pymupdf.Rect(max(40, doc_r.x0), top, min(r.width - 40, max(doc_r.x1, doc_r.x0 + 420)), top + h)
+    page.draw_rect(box, color=RED, fill=(1, 0.93, 0.93), width=1.2)
+    page.insert_textbox(box + (7, 5, -7, -3), note, fontsize=8, fontname="hebo", color=RED)
+
+
+for pno in STAMPED:
+    stamp(doc[pno - 1], STAMP_NOTE + EXTRA.get(pno, ""))
+
+# Flatten the stamped pages to images so the stamp cannot be stripped out
+for pno in STAMPED:
+    old = doc[pno - 1]
+    rect = old.rect
+    jpg = old.get_pixmap(dpi=OUT_DPI).tobytes("jpg", jpg_quality=65)
+    new = doc.new_page(pno - 1, width=rect.width, height=rect.height)
+    new.insert_image(rect, stream=jpg)
+    doc.delete_page(pno)
+
+# copy into a fresh document so the replaced page images are not carried along as orphans
+clean = pymupdf.open()
+clean.insert_pdf(doc)
+doc = clean
 doc.set_metadata(meta)  # keep author/creator/producer/dates of the original document
-doc.save(OUT, garbage=4, deflate=True)
-print(len(doc), "pages,", pymupdf.open(OUT).metadata["producer"])
+doc.save(sys.argv[1] if len(sys.argv) > 1 else OUT, garbage=4, deflate=True)
+print(len(doc), "pages,", pymupdf.open(sys.argv[1] if len(sys.argv) > 1 else OUT).metadata["producer"])
