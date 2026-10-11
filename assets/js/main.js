@@ -13,6 +13,8 @@
       nextTitle: (gap, phase) => `${gap} still needed to fully fund ${phase}`,
       phase: (id) => `phase ${id}`,
       allFunded: "Every phase is funded – thank you!",
+      unlockTitle: (label, v) => `${label}: ${v} needed now`,
+      unlockText: (donor, v) => `Once it stands, ${donor} releases its final ${v}.`,
       funded: "funded",
       ofCost: (c) => `of ${c}`,
       status: { done: "Done", building: "Under construction", next: "Up next", planned: "Planned" },
@@ -27,6 +29,8 @@
       nextTitle: (gap, phase) => `Noch ${gap}, um ${phase} voll zu finanzieren`,
       phase: (id) => `Phase ${id}`,
       allFunded: "Alle Phasen sind finanziert – danke!",
+      unlockTitle: (label, v) => `${label}: Jetzt fehlen noch ${v}`,
+      unlockText: (donor, v) => `Sobald es steht, gibt ${donor} die letzten ${v} frei.`,
       funded: "finanziert",
       ofCost: (c) => `von ${c}`,
       status: { done: "Erledigt", building: "Im Bau", next: "Als Nächstes", planned: "Geplant" },
@@ -105,9 +109,21 @@
       el.textContent = eurx(gap);
     });
 
+    // A pledge that is only paid once a phase is built: show the cash needed now to build it
+    const un = cfg.unlock;
+    const unPhase = un && cfg.phases.find((p) => p.id === un.phase);
+    const unPending = un ? toEur((prog.pending || {})[un.pending] || {}) : 0;
+    const onHand = toEur(prog.cash || {}) + toEur(prog.liabilities || {}); // liabilities are negative
+    const needNow = unPhase ? unPhase.cost - onHand : 0;
+
     const nm = $("[data-next-milestone]");
     if (nm) {
-      if (next) {
+      if (unPhase && unPhase.status !== "done" && unPending > 0 && needNow > 0) {
+        const donor = cfg.donors[un.donor] || {};
+        const dname = typeof donor.name === "object" ? donor.name[lang] : donor.name || "";
+        $("strong", nm).textContent = T.unlockTitle(un.label[lang], eurx(needNow));
+        $("span", nm).textContent = T.unlockText(dname.replace(/ e\.V\.$/, ""), eur.format(unPending));
+      } else if (next) {
         const name = $(`.phase[data-phase="${next.id}"] h3`);
         $("strong", nm).textContent = T.nextTitle(eurx(next.cost - next.funded), T.phase(next.id));
         $("span", nm).textContent = name ? name.dataset.short || name.firstChild.textContent.trim() : "";
@@ -117,10 +133,12 @@
       }
     }
 
-    // Where the money goes: everything spent is building cost except bank fees
+    // Where the money goes: everything spent is building cost except bank fees and exchange-rate losses
     if (spent > 0) {
       const fees = toEur(prog.expenses["Expenses:Fees"] || {}) / spent * 100;
-      const share = { build: 100 - fees, fees };
+      const fx = Math.max(0, toEur(prog.expenses[cfg.exchangeRateAccount] || {}) / spent * 100); // gains count as 0
+      const share = { build: 100 - fees - fx, fees, fx };
+      $$('[data-share-item="fx"]').forEach((el) => (el.hidden = fx < 0.05));
       const fmt = (v) => v.toLocaleString(lang === "de" ? "de-DE" : "en-GB", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
       $$("[data-share]").forEach((el) => {
         el.style.width = share[el.dataset.share] + "%";
@@ -162,6 +180,45 @@
           donors.appendChild(row);
         });
     }
+  }
+
+  // ---------- share ----------
+  const copyBtn = $("[data-share-copy]");
+  if (copyBtn) {
+    const label = copyBtn.textContent;
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(copyBtn.dataset.url).then(() => {
+        copyBtn.textContent = lang === "de" ? "Link kopiert ✓" : "Link copied ✓";
+        setTimeout(() => (copyBtn.textContent = label), 2000);
+      });
+    });
+  }
+  const nativeBtn = $("[data-share-native]");
+  if (nativeBtn && navigator.share) {
+    nativeBtn.hidden = false;
+    nativeBtn.addEventListener("click", () =>
+      navigator.share({ title: document.title, url: copyBtn ? copyBtn.dataset.url : location.href }).catch(() => {})
+    );
+  }
+
+  // ---------- newsletter: translate the Infomaniak form into the page language ----------
+  const nl = $(".newsletter-form");
+  if (nl) {
+    const N = {
+      en: { labels: ["Email", "First name (optional)"], submit: "Subscribe",
+            ok: "Almost done! Please check your inbox and click the link in the confirmation email.",
+            privacy: "We send the newsletter with Infomaniak (Switzerland). Your email address is stored there, used only for this newsletter, and every email has a link to unsubscribe." },
+      de: { labels: ["E-Mail", "Vorname (optional)"], submit: "Abonnieren",
+            ok: "Fast geschafft! Bitte bestätige deine Anmeldung über den Link in der E-Mail, die wir dir gerade geschickt haben.",
+            privacy: "Wir versenden den Newsletter mit Infomaniak (Schweiz). Deine E-Mail-Adresse wird dort gespeichert, nur für diesen Newsletter verwendet, und jede E-Mail enthält einen Abmeldelink." },
+    }[lang];
+    $$(".inf-input label", nl).forEach((l, i) => N.labels[i] && (l.textContent = N.labels[i]));
+    const sub = $(".inf-submit input", nl);
+    if (sub) sub.value = N.submit;
+    const ok = $(".inf-success h4", nl);
+    if (ok) ok.textContent = N.ok;
+    const pr = $(".inf-rgpd", nl);
+    if (pr) pr.textContent = N.privacy;
   }
 
   // ---------- diary scroll buttons ----------

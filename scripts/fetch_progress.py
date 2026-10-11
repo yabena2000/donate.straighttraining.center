@@ -37,9 +37,14 @@ def main():
     donors, pending, expenses = {}, {}, {}
     for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^Equity:' GROUP BY account"):
         add(donors, account, inv, sign=-1)          # equity is credited, so flip the sign
+    cash, liabilities = {}, {}
     for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^Assets:' GROUP BY account"):
         if re.match(PENDING, account):
             add(pending, account, inv)
+        else:
+            add(cash, "Assets", inv)                    # money on hand (bank, Modest, ...)
+    for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^Liabilities:' GROUP BY account"):
+        add(liabilities, "Liabilities", inv)        # open bills (negative = we owe)
     for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^Expenses:' GROUP BY account"):
         add(expenses, ":".join(account.split(":")[:2]), inv)
 
@@ -56,6 +61,8 @@ def main():
         "note": "Amounts per currency.",
         "donors": donors,
         "pending": pending,
+        "cash": cash.get("Assets", {}),
+        "liabilities": liabilities.get("Liabilities", {}),
         "expenses": dict(sorted(expenses.items(), key=lambda kv: -sum(kv[1].values()))),
     }
     path = os.path.join(ROOT, "data", "progress.json")

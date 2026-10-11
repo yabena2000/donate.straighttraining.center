@@ -73,6 +73,12 @@
         "en": "Mobile money donations",
         "de": "Mobile-Money-Spenden"
       }
+    },
+    "Equity:EquityBank": {
+      "name": {
+        "en": "Direct bank transfers to Equity Bank Tanzania",
+        "de": "Direkte Überweisungen an die Equity Bank Tansania"
+      }
     }
   },
   "expenseCategories": {
@@ -95,7 +101,22 @@
     "Expenses:Fees": {
       "en": "Bank fees",
       "de": "Bankgebühren"
+    },
+    "Expenses:ExchangeRate": {
+      "en": "Exchange rate differences",
+      "de": "Wechselkursdifferenzen"
     }
   },
-  "pendingAccounts": "^Assets:(Pending|Pledged):"
+  "pendingAccounts": "^Assets:(Pending|Pledged):",
+  "unlock": {
+    "_comment": "While this pledge is still pending, the next milestone shows the cash needed now to finish this phase (cash on hand minus open bills). Remove when the pledge has arrived.",
+    "phase": "1b",
+    "pending": "Assets:Pending:DSFAEV",
+    "donor": "Equity:DSFAEV",
+    "label": {
+      "en": "Roof",
+      "de": "Dach"
+    }
+  },
+  "exchangeRateAccount": "Expenses:ExchangeRate"
 }
