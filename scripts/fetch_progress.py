@@ -43,6 +43,12 @@ def main():
     for account, inv in query("SELECT account, units(sum(position)) WHERE account ~ '^Expenses:' GROUP BY account"):
         add(expenses, ":".join(account.split(":")[:2]), inv)
 
+    # Sanity check: an empty result means the ledger changed (e.g. renamed accounts) or is
+    # broken. Fail instead of publishing zeros; GitHub then e-mails the repository owner.
+    if not donors or not expenses:
+        raise RuntimeError("ledger returned no donations or no expenses - check the account names "
+                           "in scripts/fetch_progress.py and data/config.json")
+
     last = query("SELECT max(date)")[0][0]
     out = {
         "fetchedAt": datetime.now(timezone.utc).isoformat(timespec="minutes"),

@@ -49,6 +49,30 @@
     "Equity:DSFAEV": {
       "name": "Dein Stern für Afrika e.V.",
       "url": "https://www.stern-fuer-afrika.de"
+    },
+    "Equity:SustainableIntegrationGmbH": {
+      "name": {
+        "en": "Bank & Revolut donations via Sustainable Integration GmbH",
+        "de": "Bank- & Revolut-Spenden über Sustainable Integration GmbH"
+      }
+    },
+    "Equity:Bitcoin": {
+      "name": {
+        "en": "Bitcoin donations",
+        "de": "Bitcoin-Spenden"
+      }
+    },
+    "Equity:Crypto": {
+      "name": {
+        "en": "Crypto donations (ETH, USDC)",
+        "de": "Krypto-Spenden (ETH, USDC)"
+      }
+    },
+    "Equity:MobileMoney": {
+      "name": {
+        "en": "Mobile money donations",
+        "de": "Mobile-Money-Spenden"
+      }
     }
   },
   "expenseCategories": {

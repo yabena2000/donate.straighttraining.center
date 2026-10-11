@@ -157,7 +157,7 @@
             .reduce((a, [, v]) => a + toEur(v), 0);
           const row = document.createElement("div");
           row.className = "cat-row";
-          row.innerHTML = `<span>${d.name}</span><b>${eurx(toEur(inv))}</b>` +
+          row.innerHTML = `<span>${typeof d.name === "object" ? d.name[lang] : d.name}</span><b>${eurx(toEur(inv))}</b>` +
             (pl ? `<span class="small muted">${T.stillPending(eurx(pl))}</span>` : "");
           donors.appendChild(row);
         });

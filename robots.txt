@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://donate.straighttraining.center/sitemap.xml
