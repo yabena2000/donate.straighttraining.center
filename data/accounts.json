@@ -141,6 +141,91 @@
       "viaPartner": true
     },
     {
+      "id": "dsfa",
+      "label": {
+        "en": "With donation receipt",
+        "de": "Mit Spendenquittung"
+      },
+      "sub": {
+        "en": "EUR · via Dein Stern für Afrika",
+        "de": "EUR · über Dein Stern für Afrika"
+      },
+      "currency": "EUR",
+      "rateFromEur": 1,
+      "match": [],
+      "method": {
+        "en": "Bank transfer to our partner Dein Stern für Afrika e.V. in Germany",
+        "de": "Überweisung an unseren Partner Dein Stern für Afrika e.V. in Deutschland"
+      },
+      "fields": [
+        {
+          "key": "holder",
+          "value": "Dein Stern für Afrika e.V."
+        },
+        {
+          "key": "iban",
+          "value": "DE20 7016 3370 0000 6441 88",
+          "copy": "DE20701633700000644188"
+        },
+        {
+          "key": "bic",
+          "value": "GENODEF1FFB"
+        },
+        {
+          "key": "bank",
+          "value": "VR-Bank Fürstenfeldbruck eG"
+        },
+        {
+          "key": "referenceRequired",
+          "value": "Bau der Bildungseinrichtung Straight Training Center Zanzibar"
+        }
+      ],
+      "notes": [
+        {
+          "en": "Dein Stern für Afrika e.V. is a registered non-profit association in Germany, our building partner. On request it issues a donation receipt (Zuwendungsbestätigung) – just ask them via their website.",
+          "de": "Dein Stern für Afrika e.V. ist ein eingetragener gemeinnütziger Verein in Deutschland und unser Baupartner. Auf Wunsch stellt er dir eine Zuwendungsbestätigung (Spendenquittung) aus – frag einfach über seine Website an."
+        }
+      ]
+    },
+    {
+      "id": "paypal",
+      "label": {
+        "en": "PayPal",
+        "de": "PayPal"
+      },
+      "sub": {
+        "en": "via Dein Stern für Afrika",
+        "de": "über Dein Stern für Afrika"
+      },
+      "currency": "EUR",
+      "rateFromEur": 1,
+      "match": [],
+      "method": {
+        "en": "PayPal to our partner Dein Stern für Afrika e.V.",
+        "de": "PayPal an unseren Partner Dein Stern für Afrika e.V."
+      },
+      "fields": [
+        {
+          "key": "paypal",
+          "value": "spenden@stern-fuer-afrika.de"
+        },
+        {
+          "key": "referenceRequired",
+          "value": "Bau der Bildungseinrichtung Straight Training Center Zanzibar"
+        }
+      ],
+      "notes": [
+        {
+          "en": "Dein Stern für Afrika e.V. is a registered non-profit association in Germany, our building partner. On request it issues a donation receipt (Zuwendungsbestätigung) – just ask them via their website.",
+          "de": "Dein Stern für Afrika e.V. ist ein eingetragener gemeinnütziger Verein in Deutschland und unser Baupartner. Auf Wunsch stellt er dir eine Zuwendungsbestätigung (Spendenquittung) aus – frag einfach über seine Website an."
+        },
+        {
+          "en": "PayPal keeps a small fee from each donation.",
+          "de": "PayPal behält von jeder Spende eine kleine Gebühr ein."
+        }
+      ]
+    },
+    {
       "id": "ch",
       "label": {
         "en": "Switzerland",
