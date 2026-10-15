@@ -197,6 +197,15 @@
     }
   }
 
+  // ---------- gift amounts: shrink to one line (e.g. long shilling amounts on phones) ----------
+  const fitGifts = () => $$(".gift b").forEach((b) => {
+    b.style.fontSize = "";
+    let size = parseFloat(getComputedStyle(b).fontSize);
+    while (b.scrollWidth > b.clientWidth + 1 && size > 11) { size -= 1; b.style.fontSize = size + "px"; }
+  });
+  new MutationObserver(fitGifts).observe(document.querySelector(".gifts") || document.body, { subtree: true, characterData: true, childList: true });
+  addEventListener("resize", fitGifts);
+
   // ---------- share ----------
   const copyBtn = $("[data-share-copy]");
   if (copyBtn) {
@@ -234,6 +243,13 @@
     btn.textContent = "+";
     li.appendChild(btn);
     li.classList.add("collapsible");
+    const det = document.createElement("div");
+    det.className = "phase-details";
+    const inner = document.createElement("div");
+    inner.className = "phase-details-inner";
+    $$(":scope > div > p", li).forEach((p) => inner.appendChild(p));
+    det.appendChild(inner);
+    li.appendChild(det);
     const toggle = () => {
       const open = li.classList.toggle("open");
       btn.setAttribute("aria-expanded", String(open));
@@ -244,25 +260,44 @@
     if (h3) { h3.style.cursor = "pointer"; h3.addEventListener("click", toggle); }
   });
 
-  // ---------- diary: live photos play on hover (desktop with a mouse, not on data saver) ----------
-  const canHover = matchMedia("(hover: hover) and (pointer: fine)").matches;
-  const saveData = navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType || ""));
-  if (canHover && !saveData) {
-    $$("[data-live]").forEach((fig) => {
-      fig.classList.add("is-live");
-      let vid = null;
-      fig.addEventListener("mouseenter", () => {
-        if (!vid) {
-          vid = document.createElement("video");
-          vid.muted = true; vid.loop = true; vid.playsInline = true; vid.setAttribute("aria-hidden", "true");
-          vid.innerHTML = `<source src="${fig.dataset.live}.webm" type="video/webm"><source src="${fig.dataset.live}.mp4" type="video/mp4">`;
-          fig.insertBefore(vid, fig.querySelector("figcaption"));
-        }
-        fig.classList.add("playing");
-        vid.play().catch(() => {});
-      });
-      fig.addEventListener("mouseleave", () => { if (vid) { vid.pause(); fig.classList.remove("playing"); } });
+  // ---------- why cards: on phones only title and icon, tap to read ----------
+  $$("#why .card").forEach((card) => {
+    const h3 = $("h3", card);
+    if (!h3) return;
+    card.classList.add("foldable");
+    const btn = document.createElement("span");
+    btn.className = "why-plus"; btn.setAttribute("aria-hidden", "true"); btn.textContent = "+";
+    h3.appendChild(btn);
+    card.addEventListener("click", () => {
+      if (!matchMedia("(max-width: 700px)").matches) return;
+      const open = card.classList.toggle("open");
+      btn.textContent = open ? "−" : "+";
     });
+  });
+
+  // ---------- diary: live photos play while they are on screen (desktop with a mouse, no data saver) ----------
+  const desktop = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const saveData = navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType || ""));
+  if (desktop && !saveData && "IntersectionObserver" in window) {
+    const start = (fig) => {
+      let vid = $("video", fig);
+      if (!vid) {
+        vid = document.createElement("video");
+        vid.muted = true; vid.loop = true; vid.playsInline = true; vid.preload = "auto";
+        vid.setAttribute("muted", ""); vid.setAttribute("playsinline", ""); vid.setAttribute("aria-hidden", "true");
+        vid.innerHTML = `<source src="${fig.dataset.live}.webm" type="video/webm"><source src="${fig.dataset.live}.mp4" type="video/mp4">`;
+        vid.addEventListener("playing", () => fig.classList.add("playing"));
+        fig.insertBefore(vid, fig.querySelector("figcaption"));
+        vid.load();
+      }
+      vid.play().catch(() => {});
+    };
+    const vio = new IntersectionObserver((entries) => entries.forEach((e) => {
+      const vid = $("video", e.target);
+      if (e.isIntersecting) start(e.target);
+      else if (vid) vid.pause();
+    }), { threshold: 0.6 });
+    $$("[data-live]").forEach((fig) => { fig.classList.add("is-live"); vio.observe(fig); });
   }
 
   // ---------- timeline: items fade in as they scroll into view ----------

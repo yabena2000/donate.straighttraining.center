@@ -49,11 +49,11 @@
     ["3", "Prayer room", "Gebetsraum", 30, 23, 39, 29, U, UH, "room"],
     ["3", "Railing of the assembly area", "Geländer der Versammlungsfläche", 7, 48.4, 30, 49, U, 3, "box"],
     // 4 – volunteer rooms upstairs
-    ["4", "Volunteer bedroom", "Zimmer für Freiwillige", 1, 1, 11, 16, U, UH, "room"],
+    ["4", "Volunteer bedroom", "Zimmer für Volunteers", 1, 1, 11, 16, U, UH, "room"],
     ["4", "Bathroom", "Bad", 11, 1, 21, 6, U, UH, "room"],
     ["4", "Bathroom", "Bad", 21, 1, 30, 6, U, UH, "room"],
     ["4", "Kitchen & living room", "Küche & Wohnraum", 11, 6, 30, 16, U, UH, "room"],
-    ["4", "Volunteer bedroom", "Zimmer für Freiwillige", 30, 1, 39, 16, U, UH, "room"],
+    ["4", "Volunteer bedroom", "Zimmer für Volunteers", 30, 1, 39, 16, U, UH, "room"],
     // 5 – garden
     ["5", "Garden", "Garten", 1, 63, 39, 79, 0, 0.3, "garden"],
     ["5", "Palm", "Palme", 5, 66, 6, 67, 0.3, 11, "palm"],
@@ -66,8 +66,10 @@
   for (let x = 1; x < 39; x += 8) wall(x, 0, Math.min(39, x + 8), 1);
   for (let x = 16; x < 39; x += 8) wall(x, 79.4, Math.min(39, x + 8), 80);
   // Roof pillars (phase 1b)
+  // roof height above a point x: eaves at 21 ft on x = -1 and 41, ridge at 30 ft on x = 20
+  const roofZ = (x) => 21 + 9 * (1 - Math.abs(x - 20) / 21);
   [[1, 1], [39, 1], [1, 62], [39, 62], [20, 1], [20, 62], [1, 31], [39, 31]].forEach(([x, y]) =>
-    parts.push(["1b", "Concrete pillar", "Betonpfeiler", x - 0.6, y - 0.6, x + 0.6, y + 0.6, 0, 21, "pillar"]));
+    parts.push(["1b", "Concrete pillar", "Betonpfeiler", x - 0.6, y - 0.6, x + 0.6, y + 0.6, 0, roofZ(x), "pillar"]));
   // Stairs (phase 2): 10 steps rising from the courtyard (y = 29) towards the back (y = 23)
   for (let i = 0; i < 10; i++) {
     const y1 = 29 - i * 0.6;
@@ -92,7 +94,7 @@
 
   const COLORS = { built: [60, 122, 76], funded: [134, 186, 146], partly: [226, 165, 46], open: [222, 210, 190] };
   const RUBBLE = [150, 146, 139], GROUND = [214, 210, 203], GREEN = [130, 178, 110];
-  const DOOR = "rgb(120,82,52)", WIN = "rgb(150,200,228)";
+  const DOOR = "rgb(120,82,52)";
   const shade = (rgb, k) => `rgb(${rgb.map((v) => Math.min(255, Math.round(v * k))).join(",")})`;
 
   let phases = null, locked = null;
@@ -122,18 +124,23 @@
     }
     return out;
   }
-  function openingPolys(face, x0, y0, x1, y1, z0) {
-    return openingsOn(face, x0, y0, x1, y1, z0).map(([kind, s, e]) => {
-      const zb = z0 + (kind === "door" ? 0 : 3.5), zt = z0 + 7;
-      const fill = kind === "door" ? DOOR : WIN;
-      const glass = kind === "door" ? "" : ` fill-opacity="0.28" stroke="rgb(70,140,190)" stroke-width="0.2"`;
-      if (face === "y0" || face === "y1") {
-        const y = face === "y0" ? y0 : y1;
-        return poly([[s, y, zb], [e, y, zb], [e, y, zt], [s, y, zt]], fill, glass);
+  // A wall face with its windows cut out (see-through) and its doors painted on
+  function wallFace(face, quad, fill, x0, y0, x1, y1, z0) {
+    const rect = (s, e, zb, zt) => {
+      if (face === "y0" || face === "y1") { const y = face === "y0" ? y0 : y1; return [[s, y, zb], [e, y, zb], [e, y, zt], [s, y, zt]]; }
+      const x = face === "x0" ? x0 : x1; return [[x, s, zb], [x, e, zb], [x, e, zt], [x, s, zt]];
+    };
+    const d = (arr) => "M" + arr.map((p) => P(...p).map((v) => v.toFixed(2)).join(",")).join("L") + "Z";
+    let path = d(quad), extra = "";
+    for (const [kind, s, e] of openingsOn(face, x0, y0, x1, y1, z0)) {
+      if (kind === "door") extra += poly(rect(s, e, z0, z0 + 7), DOOR);
+      else {
+        const r = rect(s, e, z0 + 3.5, z0 + 7);
+        path += d(r);
+        extra += `<polygon points="${pts(r)}" fill="none" stroke="rgb(70,140,190)" stroke-width="0.25"/>`;
       }
-      const x = face === "x0" ? x0 : x1;
-      return poly([[x, s, zb], [x, e, zb], [x, e, zt], [x, s, zt]], fill, glass);
-    }).join("");
+    }
+    return `<path d="${path}" fill="${fill}" fill-rule="evenodd"/>` + extra;
   }
 
   function draw() {
@@ -174,10 +181,10 @@
         const backX = [[x0, y0, z0], [x0, y1, z0], [x0, y1, z1], [x0, y0, z1]];
         const backY = [[x0, y0, z0], [x1, y0, z0], [x1, y0, z1], [x0, y0, z1]];
         g = poly([[x0, y0, z0], [x1, y0, z0], [x1, y1, z0], [x0, y1, z0]], shade(base, 1.12)) +
-          poly(backX, shade(base, 0.8)) + openingPolys("x0", x0, y0, x1, y1, z0) +
-          poly(backY, shade(base, 0.92)) + openingPolys("y0", x0, y0, x1, y1, z0) +
-          poly(right, shade(base, 0.86)) + openingPolys("x1", x0, y0, x1, y1, z0) +
-          poly(front, shade(base, 0.72)) + openingPolys("y1", x0, y0, x1, y1, z0);
+          wallFace("x0", backX, shade(base, 0.8), x0, y0, x1, y1, z0) +
+          wallFace("y0", backY, shade(base, 0.92), x0, y0, x1, y1, z0) +
+          wallFace("x1", right, shade(base, 0.86), x0, y0, x1, y1, z0) +
+          wallFace("y1", front, shade(base, 0.72), x0, y0, x1, y1, z0);
       } else {
         g = poly(front, shade(base, 0.72)) + poly(right, shade(base, 0.86)) + poly(top, shade(base, 1));
       }
@@ -197,7 +204,7 @@
     if (!id || !ph) { panel.innerHTML = `<p class="m-hint">${T.hint}</p>`; return; }
     const li = document.querySelector(`.phase[data-phase="${id}"]`);
     const title = li ? li.querySelector("h3").firstChild.textContent.trim() : "";
-    const desc = li ? li.querySelector("h3 + p").textContent : "";
+    const desc = li ? (li.querySelector(".phase-details p") || li.querySelector("h3 + p")).textContent : "";
     const st = stateOf(ph);
     const names = [...new Set(parts.filter((p) => p[0] === id).map((p) => (lang === "de" ? p[2] : p[1])))];
     const pct = Math.max(0, Math.min(100, (ph.funded / ph.cost) * 100));
