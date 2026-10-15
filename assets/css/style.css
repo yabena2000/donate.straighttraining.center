@@ -647,3 +647,15 @@ html[lang="de"] .diary-track figure.needs-click:not(.playing)::before { content:
 
 /* Live photos on phones: the label hints that a tap plays it */
 @media (hover: none) { .diary-track figure.is-live:not(.playing)::before { content: "▶ LIVE"; } }
+
+/* Square Swiss flag, currency badge in the tile corner */
+.region-picker .r-icon.flag.square { width: 36px; height: 36px; top: 14px; }
+.r-cur { position: absolute; top: 8px; right: 8px; z-index: 1; font: 700 .72rem/1 var(--sans); font-style: normal; color: var(--brick-dark); background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 4px 7px; }
+.region-picker button[aria-checked="true"] .r-cur { background: var(--white); border-color: var(--brick); }
+
+/* Story: portrait only, timeline heading as a title, less space between */
+#story { padding-bottom: 48px; }
+#story .split { align-items: center; }
+.photo-stack .portrait { max-width: 360px; }
+.timeline-wrap { margin-top: 28px; }
+.timeline-head { font-size: clamp(1.8rem, 3.4vw, 2.5rem); margin: 0 0 32px; }

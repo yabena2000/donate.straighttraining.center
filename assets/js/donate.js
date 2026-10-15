@@ -41,17 +41,20 @@
   const ICONS = {
     tz: flag('<rect width="24" height="16" fill="#1eb53a"/><path d="M24 0v16H0z" fill="#00a3dd"/><path d="M-1 17 25 -1" stroke="#fcd116" stroke-width="7"/><path d="M-1 17 25 -1" stroke="#000" stroke-width="4.4"/>'),
     eu: flag(`<rect width="24" height="16" fill="#003399"/>${euStars}`),
-    ch: flag('<rect width="24" height="16" fill="#da291c"/><path d="M10.2 3.5h3.6v2.7h2.7v3.6h-2.7v2.7h-3.6V9.8H7.5V6.2h2.7z" fill="#fff"/>'),
+    ch: `<svg class="r-icon flag square" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" fill="#da291c"/><path d="M13 6h6v7h7v6h-7v7h-6v-7H6v-6h7z" fill="#fff"/></svg>`,
     gb: flag('<rect width="24" height="16" fill="#012169"/><path d="M0 0l24 16M24 0L0 16" stroke="#fff" stroke-width="3.2"/><path d="M0 0l24 16M24 0L0 16" stroke="#c8102e" stroke-width="1.2"/><path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="5"/><path d="M12 0v16M0 8h24" stroke="#c8102e" stroke-width="3"/>'),
     us: flag('<rect width="24" height="16" fill="#fff"/>' + [0, 2, 4, 6, 8, 10, 12].map((i) => `<rect y="${(i * 16) / 13}" width="24" height="${16 / 13}" fill="#b22234"/>`).join("") + '<rect width="10" height="8.6" fill="#3c3b6e"/>'),
     receipt: logo('<path d="M6 3h12v18l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5L6 21z" fill="#fff" stroke="#b5532b" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8h6M9 11.5h6M9 15h4" stroke="#b5532b" stroke-width="1.6" stroke-linecap="round"/>'),
     paypal: logo('<rect width="24" height="24" rx="6" fill="#003087"/><text x="12" y="17" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-style="italic" font-size="15" fill="#fff">P</text>'),
     revolut: logo('<rect width="24" height="24" rx="6" fill="#191c1f"/><text x="12" y="17" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="15" fill="#fff">R</text>'),
+    tigo: logo('<rect width="24" height="24" rx="6" fill="#00377b"/><text x="12" y="12.2" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="8.4" fill="#fff">tigo</text><text x="12" y="19.4" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="6" fill="#ffd200">pesa</text>'),
     phone: logo('<rect x="7" y="2.5" width="10" height="19" rx="2.2" fill="#fff" stroke="#22306e" stroke-width="1.6"/><circle cx="12" cy="18.2" r="1" fill="#22306e"/><path d="M10.5 5h3" stroke="#22306e" stroke-width="1.4" stroke-linecap="round"/>'),
     eth: logo('<circle cx="12" cy="12" r="12" fill="#627eea"/><path d="M12 3.5v6.3l5.3 2.4z" fill="#fff" fill-opacity=".6"/><path d="M12 3.5 6.7 12.2 12 9.8z" fill="#fff"/><path d="M12 16.3v4.2l5.3-7.4z" fill="#fff" fill-opacity=".6"/><path d="M12 20.5v-4.2l-5.3-3.2z" fill="#fff"/><path d="M12 15.3l5.3-3.1L12 9.8z" fill="#fff" fill-opacity=".2"/><path d="M6.7 12.2 12 15.3V9.8z" fill="#fff" fill-opacity=".6"/>'),
     btc: logo('<circle cx="12" cy="12" r="12" fill="#f7931a"/><text x="12" y="17.2" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="15" fill="#fff">₿</text>'),
   };
-  const ICON_FOR = { swift: "tz", eu: "eu", dsfa: "receipt", paypal: "paypal", ch: "ch", uk: "gb", us: "us", revolut: "revolut", tz: "phone", crypto: "eth", btc: "btc" };
+  // Currency sign shown in the corner of tiles that take one fixed currency
+  const SIGN = { swift: "€", eu: "€", dsfa: "€", paypal: "€", ch: "Fr.", uk: "£", us: "$", tz: "TSh", btc: "₿" };
+  const ICON_FOR = { swift: "tz", eu: "eu", dsfa: "receipt", paypal: "paypal", ch: "ch", uk: "gb", us: "us", revolut: "revolut", tz: "tigo", crypto: "eth", btc: "btc" };
 
   const picker = root.querySelector("[data-region-picker]");
   const panel = root.querySelector("[data-region-panel]");
@@ -82,7 +85,7 @@
   function init(data) {
     const regions = data.regions;
     picker.innerHTML = regions
-      .map((r) => `<button type="button" role="radio" aria-checked="false" data-id="${r.id}">${ICONS[ICON_FOR[r.id]] || ""}<b>${esc(r.label[lang])}</b><span>${esc(r.sub ? r.sub[lang] : r.currency)}</span></button>`)
+      .map((r) => `<button type="button" role="radio" aria-checked="false" data-id="${r.id}">${ICONS[ICON_FOR[r.id]] || ""}${SIGN[r.id] ? `<i class="r-cur" aria-hidden="true">${SIGN[r.id]}</i>` : ""}<b>${esc(r.label[lang])}</b><span>${esc(r.sub ? r.sub[lang] : r.currency)}</span></button>`)
       .join("");
     const buttons = Array.from(picker.querySelectorAll("button"));
     buttons.forEach((b, i) => {
