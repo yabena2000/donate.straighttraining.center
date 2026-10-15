@@ -453,6 +453,9 @@ blockquote cite { display: block; margin-top: 10px; font: italic .9rem var(--san
 .m-svg svg { display: block; width: 100%; height: auto; }
 .m-part { cursor: pointer; transition: opacity .25s; }
 .m-part.dim { opacity: .1; }
+.m-part.m-ground.dim { opacity: .55; }
+.m-roof-top { fill-opacity: .12; transition: fill-opacity .3s; }
+.roof-on .m-roof-top { fill-opacity: .85; stroke-dasharray: none; }
 .m-head { margin: 0 0 10px; }
 .m-info { min-height: 150px; }
 .m-info h3 { margin: 8px 0 6px; font-size: 1.15rem; }
@@ -497,3 +500,21 @@ a.logo-tile img { transition: transform .25s ease; }
 }
 a.logo-tile { position: relative; }
 html { scroll-padding-top: 90px; }
+
+/* Partner photo: rounded rectangle, big enough to see faces */
+.quote-with-photo { grid-template-columns: 1fr; gap: 14px; }
+.quote-with-photo img { width: 100%; max-width: 360px; height: auto; aspect-ratio: 607 / 387; border-radius: 12px; object-fit: cover; }
+
+/* Track record: soft, blurred photo slides behind the text */
+.track .card.has-bg { position: relative; overflow: hidden; isolation: isolate; }
+.card-bg { position: absolute; inset: 0; z-index: -1; }
+.card-bg img { position: absolute; inset: -20px; width: calc(100% + 40px); height: calc(100% + 40px); object-fit: cover; filter: blur(5px) saturate(.9); opacity: 0; }
+.card-bg::after { content: ""; position: absolute; inset: 0; background: rgba(255, 255, 255, .8); }
+.card-bg img:first-child { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .card-bg img { animation: card-slide 15s infinite; }
+  .card-bg img:nth-child(2) { animation-delay: 5s; }
+  .card-bg img:nth-child(3) { animation-delay: 10s; }
+  .card-bg img:first-child { opacity: 0; }
+}
+@keyframes card-slide { 0% { opacity: 0; } 8% { opacity: 1; } 33% { opacity: 1; } 41% { opacity: 0; } 100% { opacity: 0; } }
