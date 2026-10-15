@@ -275,12 +275,12 @@
     });
   });
 
-  // ---------- diary: live photos play on hover (desktop with a mouse, no data saver) ----------
+  // ---------- diary: live photos play on hover (desktop) or on tap (phones), never on data saver ----------
   // Browsers that block autoplay (e.g. Firefox "Block audio and video") still allow play on click,
   // so a click on the photo starts or stops the clip as well.
   const desktop = matchMedia("(hover: hover) and (pointer: fine)").matches;
   const saveData = navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType || ""));
-  if (desktop && !saveData) {
+  if (!saveData) {
     const video = (fig) => {
       let vid = $("video", fig);
       if (!vid) {
@@ -297,8 +297,11 @@
     };
     $$("[data-live]").forEach((fig) => {
       fig.classList.add("is-live");
-      fig.addEventListener("mouseenter", () => video(fig).play().catch(() => fig.classList.add("needs-click")));
-      fig.addEventListener("mouseleave", () => { const v = $("video", fig); if (v) v.pause(); });
+      if (desktop) {
+        fig.addEventListener("mouseenter", () => video(fig).play().catch(() => fig.classList.add("needs-click")));
+        fig.addEventListener("mouseleave", () => { const v = $("video", fig); if (v) v.pause(); });
+      }
+      // phones: a tap plays or stops the clip – nothing loads before that tap
       fig.addEventListener("click", () => { const v = video(fig); v.paused ? v.play().catch(() => {}) : v.pause(); });
     });
   }

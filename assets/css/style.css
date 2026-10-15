@@ -633,3 +633,17 @@ html { scroll-padding-top: 90px; }
 .diary-track figure.needs-click:not(.playing)::before { content: "▶ Click to play"; }
 html[lang="de"] .diary-track figure.needs-click:not(.playing)::before { content: "▶ Klicken zum Abspielen"; }
 #donate .wrap > p.small { text-align: center; }
+
+/* Donation tiles: the colourful logo leads; on hover or when chosen it floats into the background and the details appear */
+.region-picker button { position: relative; overflow: hidden; min-height: 118px; text-align: center; align-content: end; padding: 12px 10px 12px; }
+.region-picker .r-icon { position: absolute; top: 14px; left: 50%; margin: 0; width: 40px; height: 40px; transform: translateX(-50%); transition: transform .5s cubic-bezier(.2, .8, .2, 1), opacity .4s ease; }
+.region-picker .r-icon.flag { width: 50px; height: 33px; top: 18px; }
+.region-picker button b, .region-picker button span { position: relative; z-index: 1; }
+.region-picker button span { opacity: 0; max-height: 0; overflow: hidden; transform: translateY(6px); transition: opacity .3s ease, transform .3s ease, max-height .35s ease; }
+.region-picker button:hover .r-icon, .region-picker button:focus-visible .r-icon, .region-picker button[aria-checked="true"] .r-icon {
+  transform: translate(-50%, 18px) scale(2.6) rotate(-8deg); opacity: .16; }
+.region-picker button:hover span, .region-picker button:focus-visible span, .region-picker button[aria-checked="true"] span { opacity: 1; transform: none; max-height: 3.2em; }
+@media (prefers-reduced-motion: reduce) { .region-picker .r-icon, .region-picker button span { transition: none; } }
+
+/* Live photos on phones: the label hints that a tap plays it */
+@media (hover: none) { .diary-track figure.is-live:not(.playing)::before { content: "▶ LIVE"; } }
