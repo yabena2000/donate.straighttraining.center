@@ -676,3 +676,11 @@ html[lang="de"] .diary-track figure.needs-click:not(.playing)::before { content:
 .btn-mail:hover { background: rgba(255, 255, 255, .2); }
 .contact-addr { font-size: .85rem; color: rgba(255, 255, 255, .7) !important; }
 @media (max-width: 760px) { .contact { padding: 40px 0; } .contact-band { grid-template-columns: 1fr; gap: 20px; } }
+/* Contact: label and number/address on one line on computers */
+@media (min-width: 900px) {
+  .contact-band { grid-template-columns: 1fr auto; }
+  .contact-actions .btn span { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
+  .contact-actions .btn small { font-size: .95rem; overflow-wrap: normal; }
+  .contact-actions .btn { padding: 14px 24px; }
+  .contact-addr { white-space: nowrap; }
+}
