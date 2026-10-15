@@ -303,7 +303,9 @@ blockquote cite { display: block; margin-top: 10px; font: italic .9rem var(--san
 
 /* Supporters */
 .supporters { background: var(--white); }
-.logos { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin-top: 32px; align-items: stretch; }
+.logos { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 32px; }
+.logos > .logo-tile { flex: 0 1 200px; }
+@media (max-width: 600px) { .logos > .logo-tile { flex-basis: calc(50% - 8px); } }
 .logo-tile {
   background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: grid; place-items: center;
   min-height: 120px; text-decoration: none; color: var(--ink);
@@ -475,3 +477,23 @@ blockquote cite { display: block; margin-top: 10px; font: italic .9rem var(--san
   .model { grid-template-columns: 1fr; gap: 12px; padding: 16px; }
   .m-info { min-height: 0; }
 }
+
+/* Partner: logo and quote side by side with the text */
+.partner-side { display: grid; gap: 24px; align-content: start; }
+.partner-side .quote-with-photo { margin: 0; }
+#partner .split { align-items: start; }
+
+/* Gallery: fill gaps */
+.gallery { grid-auto-flow: dense; }
+
+/* Supporter logos: clickable tiles react to the mouse */
+a.logo-tile { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+a.logo-tile img { transition: transform .25s ease; }
+@media (hover: hover) {
+  a.logo-tile:hover, a.logo-tile:focus-visible { transform: translateY(-4px); border-color: var(--brick); box-shadow: 0 10px 24px rgba(35,30,26,.12); }
+  a.logo-tile:hover img { transform: scale(1.06); }
+  a.logo-tile::after { content: "↗"; position: absolute; top: 8px; right: 10px; font-size: .85rem; color: var(--brick); opacity: 0; transition: opacity .2s; }
+  a.logo-tile:hover::after { opacity: 1; }
+}
+a.logo-tile { position: relative; }
+html { scroll-padding-top: 90px; }

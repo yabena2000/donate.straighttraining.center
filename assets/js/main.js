@@ -207,16 +207,21 @@
       });
     });
   }
-  // The system share sheet only on phones/tablets; desktop browsers often fail silently
-  const nativeBtn = $("[data-share-native]");
-  if (nativeBtn && navigator.share && matchMedia("(pointer: coarse)").matches) {
-    nativeBtn.hidden = false;
-    nativeBtn.addEventListener("click", () =>
-      navigator.share({ title: document.title, url: copyBtn ? copyBtn.dataset.url : location.href }).catch((e) => {
-        if (e.name !== "AbortError" && copyBtn) copyBtn.click(); // fall back to copying the link
-      })
-    );
-  }
+
+  // ---------- in-page links: correct the position once lazy images above the target have loaded ----------
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    const target = a && a.getAttribute("href").length > 1 && document.querySelector(a.getAttribute("href"));
+    if (!target) return;
+    e.preventDefault();
+    history.pushState(null, "", a.getAttribute("href"));
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    // If images loaded during the scroll and pushed the target down, land on it precisely
+    setTimeout(() => {
+      const off = target.getBoundingClientRect().top - parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop || 0);
+      if (Math.abs(off) > 40) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 1200);
+  });
 
   // ---------- timeline: items fade in as they scroll into view ----------
   const tl = $(".timeline");
