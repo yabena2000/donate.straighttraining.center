@@ -106,6 +106,13 @@
       li.classList.toggle("is-next", next === p);
     });
 
+    // Hand the phases to the 3D model (model.js)
+    window.__stcPhases = cfg.phases.map((p) => ({
+      id: p.id, cost: p.cost, funded: p.funded, status: p.status,
+      fmt: (v) => fmt(v, donorsX), fmtCost: eur.format(p.cost),
+    }));
+    document.dispatchEvent(new CustomEvent("stc:phases", { detail: window.__stcPhases }));
+
     // Money still missing up to and including a given phase, e.g. <b data-gap-until="1c">
     $$("[data-gap-until]").forEach((el) => {
       const upto = cfg.phases.findIndex((p) => p.id === el.dataset.gapUntil);
