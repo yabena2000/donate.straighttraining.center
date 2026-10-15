@@ -104,6 +104,7 @@
       $(".cost", li).textContent = T.ofCost(eur.format(p.cost));
       requestAnimationFrame(() => ($(".bar i", li).style.width = pct(p.funded, p.cost) + "%"));
       li.classList.toggle("is-next", next === p);
+      li.classList.toggle("is-funded", p.status === "done" || p.funded >= p.cost - 0.5);
     });
 
     // Hand the phases to the 3D model (model.js)
@@ -222,6 +223,47 @@
       if (Math.abs(off) > 40) target.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 1200);
   });
+
+  // ---------- phases: short rows, details open with the + button ----------
+  $$(".phase").forEach((li) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "phase-toggle";
+    btn.setAttribute("aria-expanded", "false");
+    btn.setAttribute("aria-label", lang === "de" ? "Details anzeigen" : "Show details");
+    btn.textContent = "+";
+    li.appendChild(btn);
+    li.classList.add("collapsible");
+    const toggle = () => {
+      const open = li.classList.toggle("open");
+      btn.setAttribute("aria-expanded", String(open));
+      btn.textContent = open ? "−" : "+";
+    };
+    btn.addEventListener("click", toggle);
+    const h3 = $("h3", li);
+    if (h3) { h3.style.cursor = "pointer"; h3.addEventListener("click", toggle); }
+  });
+
+  // ---------- diary: live photos play on hover (desktop with a mouse, not on data saver) ----------
+  const canHover = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const saveData = navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType || ""));
+  if (canHover && !saveData) {
+    $$("[data-live]").forEach((fig) => {
+      fig.classList.add("is-live");
+      let vid = null;
+      fig.addEventListener("mouseenter", () => {
+        if (!vid) {
+          vid = document.createElement("video");
+          vid.muted = true; vid.loop = true; vid.playsInline = true; vid.setAttribute("aria-hidden", "true");
+          vid.innerHTML = `<source src="${fig.dataset.live}.webm" type="video/webm"><source src="${fig.dataset.live}.mp4" type="video/mp4">`;
+          fig.insertBefore(vid, fig.querySelector("figcaption"));
+        }
+        fig.classList.add("playing");
+        vid.play().catch(() => {});
+      });
+      fig.addEventListener("mouseleave", () => { if (vid) { vid.pause(); fig.classList.remove("playing"); } });
+    });
+  }
 
   // ---------- timeline: items fade in as they scroll into view ----------
   const tl = $(".timeline");

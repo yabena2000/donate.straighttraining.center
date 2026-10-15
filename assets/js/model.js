@@ -29,7 +29,7 @@
     ["1a", "Foundation", "Fundament", 1, 1, 39, 62, 0, 1, "foundation"],
     ["1a", "Gate", "Tor", 1, 79.4, 16, 80, 0, 5, "gate"],
     // 1b – pillars and one large roof
-    ["1b", "Roof", "Dach", -0.5, -0.5, 40.5, 64, 21, 0.6, "roof"],
+    ["1b", "Roof", "Dach", -1, -1, 41, 64, 21, 9, "roof"],
     // 1c – classrooms 1–3, office, toilets, septic tank, well
     ["1c", "Office", "Büro", 7, 29, 23, 43, 1, R, "room"],
     ["1c", "Classroom 3", "Klassenzimmer 3", 24, 23, 39, 43, 1, R, "room"],
@@ -56,6 +56,9 @@
     ["4", "Volunteer bedroom", "Zimmer für Freiwillige", 30, 1, 39, 16, U, UH, "room"],
     // 5 – garden
     ["5", "Garden", "Garten", 1, 63, 39, 79, 0, 0.3, "garden"],
+    ["5", "Palm", "Palme", 5, 66, 6, 67, 0.3, 11, "palm"],
+    ["5", "Palm", "Palme", 26, 67, 27, 68, 0.3, 9, "palm"],
+    ["5", "Palm", "Palme", 13, 74, 14, 75, 0.3, 10, "palm"],
   ];
   // Outer wall in short segments so the drawing order stays correct
   const wall = (x0, y0, x1, y1) => parts.push(["1a", "Outer wall", "Außenmauer", x0, y0, x1, y1, 0, W, "wall"]);
@@ -123,12 +126,13 @@
     return openingsOn(face, x0, y0, x1, y1, z0).map(([kind, s, e]) => {
       const zb = z0 + (kind === "door" ? 0 : 3.5), zt = z0 + 7;
       const fill = kind === "door" ? DOOR : WIN;
+      const glass = kind === "door" ? "" : ` fill-opacity="0.28" stroke="rgb(70,140,190)" stroke-width="0.2"`;
       if (face === "y0" || face === "y1") {
         const y = face === "y0" ? y0 : y1;
-        return poly([[s, y, zb], [e, y, zb], [e, y, zt], [s, y, zt]], fill);
+        return poly([[s, y, zb], [e, y, zb], [e, y, zt], [s, y, zt]], fill, glass);
       }
       const x = face === "x0" ? x0 : x1;
-      return poly([[x, s, zb], [x, e, zb], [x, e, zt], [x, s, zt]], fill);
+      return poly([[x, s, zb], [x, e, zb], [x, e, zt], [x, s, zt]], fill, glass);
     }).join("");
   }
 
@@ -149,7 +153,22 @@
       const ground = kind === "foundation" || kind === "garden" ? " m-ground" : "";
       let g = "";
       if (kind === "roof") {
-        g = poly(top, shade(base, 1), ` class="m-roof-top" stroke="${shade(base, 0.6)}" stroke-width="0.35" stroke-dasharray="1.2 0.8"`);
+        // gable roof (Giebeldach): two slopes from the eaves (z0) up to the ridge (z1) in the middle
+        const xm = (x0 + x1) / 2, line = ` class="m-roof-top" stroke="${shade(base, 0.6)}" stroke-width="0.35" stroke-dasharray="1.2 0.8"`;
+        g = poly([[x0, y0, z0], [xm, y0, z1], [xm, y1, z1], [x0, y1, z0]], shade(base, 0.92), line) +
+          poly([[xm, y0, z1], [x1, y0, z0], [x1, y1, z0], [xm, y1, z1]], shade(base, 1.05), line) +
+          `<polyline class="m-gable" points="${pts([[x0, y1, z0], [xm, y1, z1], [x1, y1, z0]])}" fill="none" stroke="${shade(base, 0.55)}" stroke-width="0.4"/>`;
+      } else if (kind === "palm") {
+        // palm: thin trunk and a crown of yellowish leaves (not the green used for funding)
+        const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, top = z0 + h;
+        g = poly([[cx - 0.3, cy + 0.3, z0], [cx + 0.3, cy + 0.3, z0], [cx + 0.3, cy + 0.3, top], [cx - 0.3, cy + 0.3, top]], "rgb(122,92,60)") +
+          poly([[cx + 0.3, cy - 0.3, z0], [cx + 0.3, cy + 0.3, z0], [cx + 0.3, cy + 0.3, top], [cx + 0.3, cy - 0.3, top]], "rgb(146,112,74)");
+        for (let k = 0; k < 7; k++) {
+          const a = (k / 7) * Math.PI * 2, L = 4.2, ex = cx + Math.cos(a) * L, ey = cy + Math.sin(a) * L;
+          const sx = Math.cos(a + Math.PI / 2) * 0.9, sy = Math.sin(a + Math.PI / 2) * 0.9;
+          g += poly([[cx, cy, top + 0.4], [cx + (ex - cx) * 0.5 + sx, cy + (ey - cy) * 0.5 + sy, top + 0.6], [ex, ey, top - 1.6],
+                     [cx + (ex - cx) * 0.5 - sx, cy + (ey - cy) * 0.5 - sy, top + 0.2]], k % 2 ? "rgb(201,178,88)" : "rgb(180,158,70)");
+        }
       } else if (kind === "room") {
         // open box: floor, inside of the back walls, then the outside of the front walls
         const backX = [[x0, y0, z0], [x0, y1, z0], [x0, y1, z1], [x0, y0, z1]];
@@ -164,7 +183,7 @@
       }
       svg += `<g class="m-part${kind === "roof" ? " m-roof" : ""}${ground}" data-phase="${ph}" data-label="${label}">${g}</g>`;
     }
-    const c = [P(0, 0, 0), P(40, 0, 0), P(0, 80, 0), P(40, 80, 0), P(0, 0, 22), P(40, 0, 22)];
+    const c = [P(-1, -1, 21), P(41, -1, 21), P(-1, 80, 0), P(41, 80, 0), P(20, -1, 30), P(41, 64, 21)];
     const xs = c.map((p) => p[0]), ys = c.map((p) => p[1]);
     const vb = [Math.min(...xs) - 2, Math.min(...ys) - 2, Math.max(...xs) - Math.min(...xs) + 4, Math.max(...ys) - Math.min(...ys) + 4];
     root.querySelector(".m-svg").innerHTML =

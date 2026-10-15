@@ -454,7 +454,8 @@ blockquote cite { display: block; margin-top: 10px; font: italic .9rem var(--san
 .m-part { cursor: pointer; transition: opacity .25s; }
 .m-part.dim { opacity: .1; }
 .m-part.m-ground.dim { opacity: .55; }
-.m-roof-top { fill-opacity: .12; transition: fill-opacity .3s; }
+.m-roof-top { fill-opacity: .12; transition: fill-opacity .3s; pointer-events: none; }
+.m-gable { pointer-events: none; }
 .roof-on .m-roof-top { fill-opacity: .85; stroke-dasharray: none; }
 .m-head { margin: 0 0 10px; }
 .m-info { min-height: 150px; }
@@ -518,3 +519,47 @@ html { scroll-padding-top: 90px; }
   .card-bg img:first-child { opacity: 0; }
 }
 @keyframes card-slide { 0% { opacity: 0; } 8% { opacity: 1; } 33% { opacity: 1; } 41% { opacity: 0; } 100% { opacity: 0; } }
+
+/* Timeline: larger text */
+.tl-text h3 { font-size: 1.35rem; }
+.tl-text p { font-size: 1.05rem; }
+.tl-year { font-size: 1.15rem; padding: 6px 14px; }
+@media (max-width: 700px) { .tl-text h3 { font-size: 1.12rem; } .tl-text p { font-size: 1rem; } .tl-year { font-size: .98rem; padding: 3px 10px; } }
+
+/* Why: faint photo of a class on the floor of a rented room behind the cards */
+#why { background: linear-gradient(rgba(242, 232, 216, .9), rgba(242, 232, 216, .9)), url("../img/photos/why-bg.jpg") center / cover no-repeat; }
+
+/* Phases: compact rows, details behind + */
+.phase.collapsible { grid-template-columns: 64px 1fr 220px 40px; padding: 12px 18px; }
+.phase.collapsible:not(.open) > div > p { display: none; }
+.phase.collapsible h3 { margin: 0; }
+.phase-toggle { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--line); background: var(--paper); font: 600 1.2rem/1 var(--sans); color: var(--brick-dark); cursor: pointer; }
+.phase-toggle:hover { border-color: var(--brick); }
+.phase.is-funded .bar i { background: var(--green); }
+@media (max-width: 760px) {
+  .phase.collapsible { grid-template-columns: 44px 1fr 40px; }
+  .phase.collapsible .phase-fund { grid-column: 1 / -1; grid-row: 2; }
+}
+
+/* Partner: photo inside the quote box */
+.quote-card { margin: 0; overflow: hidden; }
+.q-photo { float: right; width: 150px; margin: 2px 0 10px 16px; position: relative; }
+.q-photo img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; }
+.q-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 8px 6px; border-radius: 0 0 10px 10px; font: 600 .72rem/1.2 var(--sans); color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, .65)); }
+@media (max-width: 480px) { .q-photo { width: 110px; } }
+
+/* Track record: photos faint but sharp */
+.card-bg img { filter: none; inset: 0; width: 100%; height: 100%; }
+.card-bg::after { background: rgba(255, 255, 255, .84); }
+
+/* Supporter logos: stronger hover */
+@media (hover: hover) {
+  a.logo-tile:hover, a.logo-tile:focus-visible { border-color: var(--brick); box-shadow: 0 0 0 2px var(--brick), 0 12px 28px rgba(35, 30, 26, .16); }
+  a.logo-tile::after { font-size: 1.35rem; font-weight: 800; top: 6px; right: 10px; }
+}
+
+/* Diary: live photos */
+.diary-track figure[data-live] { position: relative; }
+.diary-track figure video { position: absolute; top: 0; left: 0; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; opacity: 0; transition: opacity .25s; pointer-events: none; }
+.diary-track figure.playing video { opacity: 1; }
+.diary-track figure.is-live::before { content: "LIVE"; position: absolute; top: 10px; left: 10px; z-index: 2; font: 700 .65rem/1 var(--sans); letter-spacing: .08em; color: #fff; background: rgba(0, 0, 0, .55); padding: 4px 7px; border-radius: 999px; }
