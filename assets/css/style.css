@@ -600,3 +600,36 @@ html { scroll-padding-top: 90px; }
 
 /* Gifts: amounts stay on one line */
 .gift b { white-space: nowrap; overflow: hidden; }
+
+/* Donation tiles: centred rows with small icons, details centred below */
+.region-picker { display: flex; flex-wrap: wrap; justify-content: center; }
+.region-picker button { flex: 0 1 150px; }
+.r-icon { display: block; width: 26px; height: 26px; margin-bottom: 8px; }
+.r-icon.flag { width: 30px; height: 20px; border-radius: 3px; box-shadow: 0 0 0 1px rgba(0, 0, 0, .12); }
+#donate #region-label, #donate #region-label + p, #donate .other-currency { text-align: center; }
+.region-panel, .partner-note { margin-left: auto; margin-right: auto; }
+@media (max-width: 600px) { .region-picker button { flex-basis: calc(50% - 4px); } }
+
+/* Track record: one slideshow behind the section, cards stay plain white */
+.track { position: relative; overflow: hidden; isolation: isolate; }
+.track-bg { position: absolute; inset: 0; z-index: -1; }
+.track-bg img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }
+.track-bg img:first-child { opacity: 1; }
+.track-bg::after { content: ""; position: absolute; inset: 0; background: rgba(251, 247, 240, .9); }
+@media (prefers-reduced-motion: no-preference) {
+  .track-bg img { animation: track-slide 30s infinite; }
+  .track-bg img:first-child { opacity: 0; }
+  .track-bg img:nth-child(2) { animation-delay: 5s; }
+  .track-bg img:nth-child(3) { animation-delay: 10s; }
+  .track-bg img:nth-child(4) { animation-delay: 15s; }
+  .track-bg img:nth-child(5) { animation-delay: 20s; }
+  .track-bg img:nth-child(6) { animation-delay: 25s; }
+}
+@keyframes track-slide { 0% { opacity: 0; } 4% { opacity: 1; } 17% { opacity: 1; } 21% { opacity: 0; } 100% { opacity: 0; } }
+
+/* Live photos: pointer, and a hint when the browser blocks hover play */
+.diary-track figure.is-live { cursor: pointer; }
+.diary-track figure.is-live::before { content: "▶ LIVE"; }
+.diary-track figure.needs-click:not(.playing)::before { content: "▶ Click to play"; }
+html[lang="de"] .diary-track figure.needs-click:not(.playing)::before { content: "▶ Klicken zum Abspielen"; }
+#donate .wrap > p.small { text-align: center; }

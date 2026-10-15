@@ -275,11 +275,13 @@
     });
   });
 
-  // ---------- diary: live photos play while they are on screen (desktop with a mouse, no data saver) ----------
+  // ---------- diary: live photos play on hover (desktop with a mouse, no data saver) ----------
+  // Browsers that block autoplay (e.g. Firefox "Block audio and video") still allow play on click,
+  // so a click on the photo starts or stops the clip as well.
   const desktop = matchMedia("(hover: hover) and (pointer: fine)").matches;
   const saveData = navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType || ""));
-  if (desktop && !saveData && "IntersectionObserver" in window) {
-    const start = (fig) => {
+  if (desktop && !saveData) {
+    const video = (fig) => {
       let vid = $("video", fig);
       if (!vid) {
         vid = document.createElement("video");
@@ -287,17 +289,18 @@
         vid.setAttribute("muted", ""); vid.setAttribute("playsinline", ""); vid.setAttribute("aria-hidden", "true");
         vid.innerHTML = `<source src="${fig.dataset.live}.webm" type="video/webm"><source src="${fig.dataset.live}.mp4" type="video/mp4">`;
         vid.addEventListener("playing", () => fig.classList.add("playing"));
+        vid.addEventListener("pause", () => fig.classList.remove("playing"));
         fig.insertBefore(vid, fig.querySelector("figcaption"));
         vid.load();
       }
-      vid.play().catch(() => {});
+      return vid;
     };
-    const vio = new IntersectionObserver((entries) => entries.forEach((e) => {
-      const vid = $("video", e.target);
-      if (e.isIntersecting) start(e.target);
-      else if (vid) vid.pause();
-    }), { threshold: 0.6 });
-    $$("[data-live]").forEach((fig) => { fig.classList.add("is-live"); vio.observe(fig); });
+    $$("[data-live]").forEach((fig) => {
+      fig.classList.add("is-live");
+      fig.addEventListener("mouseenter", () => video(fig).play().catch(() => fig.classList.add("needs-click")));
+      fig.addEventListener("mouseleave", () => { const v = $("video", fig); if (v) v.pause(); });
+      fig.addEventListener("click", () => { const v = video(fig); v.paused ? v.play().catch(() => {}) : v.pause(); });
+    });
   }
 
   // ---------- timeline: items fade in as they scroll into view ----------
