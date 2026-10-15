@@ -215,10 +215,16 @@
   const tl = $(".timeline");
   if (tl && "IntersectionObserver" in window) {
     tl.classList.add("anim");
-    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-    }), { rootMargin: "0px 0px -10% 0px" });
+    let fired = false;
+    const io = new IntersectionObserver((entries) => {
+      fired = true;
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { rootMargin: "0px 0px -10% 0px" });
     $$(".tl-item", tl).forEach((li) => io.observe(li));
+    // Safety net: if the observer never reports (some embedded or headless browsers), just show everything
+    setTimeout(() => { if (!fired) $$(".tl-item", tl).forEach((li) => li.classList.add("in")); }, 2000);
   }
 
   // ---------- diary scroll buttons ----------
