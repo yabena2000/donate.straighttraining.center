@@ -52,8 +52,6 @@
     eth: logo('<circle cx="12" cy="12" r="12" fill="#627eea"/><path d="M12 3.5v6.3l5.3 2.4z" fill="#fff" fill-opacity=".6"/><path d="M12 3.5 6.7 12.2 12 9.8z" fill="#fff"/><path d="M12 16.3v4.2l5.3-7.4z" fill="#fff" fill-opacity=".6"/><path d="M12 20.5v-4.2l-5.3-3.2z" fill="#fff"/><path d="M12 15.3l5.3-3.1L12 9.8z" fill="#fff" fill-opacity=".2"/><path d="M6.7 12.2 12 15.3V9.8z" fill="#fff" fill-opacity=".6"/>'),
     btc: logo('<circle cx="12" cy="12" r="12" fill="#f7931a"/><text x="12" y="17.2" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="15" fill="#fff">₿</text>'),
   };
-  // Currency sign shown in the corner of tiles that take one fixed currency
-  const SIGN = { swift: "€", eu: "€", dsfa: "€", paypal: "€", ch: "Fr.", uk: "£", us: "$", tz: "TSh", btc: "₿" };
   const ICON_FOR = { swift: "tz", eu: "eu", dsfa: "receipt", paypal: "paypal", ch: "ch", uk: "gb", us: "us", revolut: "revolut", tz: "tigo", crypto: "eth", btc: "btc" };
 
   const picker = root.querySelector("[data-region-picker]");
@@ -85,7 +83,7 @@
   function init(data) {
     const regions = data.regions;
     picker.innerHTML = regions
-      .map((r) => `<button type="button" role="radio" aria-checked="false" data-id="${r.id}">${ICONS[ICON_FOR[r.id]] || ""}${SIGN[r.id] ? `<i class="r-cur" aria-hidden="true">${SIGN[r.id]}</i>` : ""}<b>${esc(r.label[lang])}</b><span>${esc(r.sub ? r.sub[lang] : r.currency)}</span></button>`)
+      .map((r) => `<button type="button" role="radio" aria-checked="false" data-id="${r.id}">${ICONS[ICON_FOR[r.id]] || ""}<b>${esc(r.label[lang])}</b><span>${esc(r.sub ? r.sub[lang] : r.currency)}</span></button>`)
       .join("");
     const buttons = Array.from(picker.querySelectorAll("button"));
     buttons.forEach((b, i) => {
