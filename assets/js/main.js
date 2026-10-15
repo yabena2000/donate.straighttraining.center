@@ -211,6 +211,16 @@
     );
   }
 
+  // ---------- timeline: items fade in as they scroll into view ----------
+  const tl = $(".timeline");
+  if (tl && "IntersectionObserver" in window) {
+    tl.classList.add("anim");
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    }), { rootMargin: "0px 0px -10% 0px" });
+    $$(".tl-item", tl).forEach((li) => io.observe(li));
+  }
+
   // ---------- diary scroll buttons ----------
   const track = $(".diary-track");
   $$("[data-scroll]").forEach((b) =>
