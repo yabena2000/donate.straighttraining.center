@@ -684,3 +684,26 @@ html[lang="de"] .diary-track figure.needs-click:not(.playing)::before { content:
   .contact-actions .btn { padding: 14px 24px; }
   .contact-addr { white-space: nowrap; }
 }
+
+/* Student voices: handwritten answers, replayed stroke by stroke */
+.voices { background: var(--paper); padding-top: 64px; }
+.voices-track {
+  display: grid; grid-auto-flow: column; grid-auto-columns: min(460px, 86vw); gap: 20px;
+  overflow-x: auto; scroll-snap-type: x mandatory; padding: 8px max(20px, calc((100vw - var(--wrap)) / 2 + 20px)) 24px; margin-top: 28px;
+  scroll-padding-inline: max(20px, calc((100vw - var(--wrap)) / 2 + 20px));
+  scrollbar-color: var(--brick) transparent;
+}
+.voice { margin: 0; scroll-snap-align: start; display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.voice-paper { position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 3 / 2; padding: 14px 16px; border: 0; border-bottom: 1px solid var(--line); cursor: pointer;
+  background: #fffdf8; }
+.voice-paper svg { width: 100%; height: 100%; overflow: visible; }
+.voice-paper path { fill: none; stroke: var(--navy); stroke-width: 1.5px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
+.voice-pen { position: absolute; right: 10px; bottom: 10px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--white); color: var(--brick); border: 1px solid var(--line); opacity: .85; transition: opacity .2s; }
+.voice-pen svg { width: 16px; height: 16px; }
+.voice.writing .voice-pen { opacity: 0; }
+.voice blockquote { margin: 0; padding: 18px 20px 6px; border: 0; border-radius: 0; background: none; box-shadow: none; quotes: none; font: italic 1.05rem/1.5 var(--serif); color: var(--ink); flex: 1; }
+.voice figcaption { padding: 0 20px 18px; font: 600 .82rem/1 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--brick); }
+.voices .diary-controls button { border-color: var(--line); color: var(--ink); }
+.voices .diary-controls button:hover { background: var(--sand); }
+.voices-note { margin-top: 4px; font-size: .85rem; color: var(--muted); }
+@media (max-width: 600px) { .voices-track { gap: 14px; } .voice blockquote { font-size: 1rem; } }

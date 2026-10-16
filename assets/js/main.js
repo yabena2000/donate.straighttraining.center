@@ -329,6 +329,66 @@
   );
   if (track) track.scrollLeft = track.scrollWidth; // start at the newest entry
 
+  // ---------- student voices: handwriting drawn from the original pen strokes ----------
+  const vTrack = $(".voices-track");
+  if (vTrack) {
+    $$("[data-vscroll]").forEach((b) =>
+      b.addEventListener("click", () => vTrack.scrollBy({ left: Number(b.dataset.vscroll) * vTrack.clientWidth * 0.8, behavior: "smooth" }))
+    );
+    const NS = "http://www.w3.org/2000/svg";
+    const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let data = null;
+    const load = () => data || (data = fetch(base + "data/handwriting.json").then((r) => r.json()));
+    const render = (fig, hw) => {
+      const svg = $("svg", fig);
+      svg.setAttribute("viewBox", `0 0 ${hw.w} ${hw.h}`);
+      const frag = document.createDocumentFragment();
+      hw.s.forEach(([, , d]) => { const p = document.createElementNS(NS, "path"); p.setAttribute("d", d); frag.appendChild(p); });
+      svg.appendChild(frag);
+      fig._hw = hw;
+    };
+    // Replay at the students' own rhythm, sped up so a page takes 10–20 seconds
+    const play = (fig) => {
+      const hw = fig._hw;
+      if (!hw || fig.classList.contains("writing")) return;
+      const paths = $$("path", fig);
+      const len = paths.map((p) => p.getTotalLength() || 0.1);
+      paths.forEach((p, i) => { p.style.strokeDasharray = len[i]; p.style.strokeDashoffset = len[i]; });
+      const speed = Math.max(4, hw.ms / 18000);
+      fig.classList.add("writing");
+      const t0 = performance.now();
+      let next = 0;
+      const step = (now) => {
+        const t = (now - t0) * speed;
+        while (next < paths.length && t >= hw.s[next][0] + hw.s[next][1]) { paths[next].style.strokeDashoffset = 0; next++; }
+        for (let i = next; i < paths.length && hw.s[i][0] <= t; i++) {
+          const f = (t - hw.s[i][0]) / hw.s[i][1];
+          paths[i].style.strokeDashoffset = len[i] * (1 - Math.min(1, f));
+        }
+        if (next < paths.length) requestAnimationFrame(step);
+        else { paths.forEach((p) => { p.style.strokeDasharray = ""; p.style.strokeDashoffset = ""; }); fig.classList.remove("writing"); }
+      };
+      requestAnimationFrame(step);
+    };
+    const figs = $$(".voice", vTrack);
+    let started = false;
+    const init = () => {
+      if (started) return;
+      started = true;
+      removeEventListener("scroll", near);
+      load().then((all) => figs.forEach((f) => all[f.dataset.hw] && render(f, all[f.dataset.hw]))).catch(() => {});
+    };
+    // Load the strokes only when the section comes close (checked on scroll; works in every browser)
+    const near = () => { if (vTrack.getBoundingClientRect().top < innerHeight + 800) init(); };
+    addEventListener("scroll", near, { passive: true });
+    near();
+    const hover = window.matchMedia && matchMedia("(hover: hover)").matches;
+    figs.forEach((f) => {
+      if (hover && !reduce) f.addEventListener("mouseenter", () => play(f));
+      $(".voice-paper", f).addEventListener("click", () => play(f));
+    });
+  }
+
   // ---------- Vimeo: load only on click (no third-party requests before consent) ----------
   $$(".vimeo-facade").forEach((btn) =>
     btn.addEventListener("click", () => {
