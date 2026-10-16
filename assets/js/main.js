@@ -346,15 +346,18 @@
       hw.s.forEach(([, , d]) => { const p = document.createElementNS(NS, "path"); p.setAttribute("d", d); frag.appendChild(p); });
       svg.appendChild(frag);
       fig._hw = hw;
+      fig._ink = $$("path", svg).reduce((sum, p) => sum + p.getTotalLength(), 0);
     };
-    // Replay at the students' own rhythm, sped up so a page takes 10–20 seconds
+    // Replay in the students' own rhythm, at the same writing speed for every page:
+    // the page with the most ink takes 25 s, a short one about 10 s
+    let maxInk = 1;
     const play = (fig) => {
       const hw = fig._hw;
       if (!hw || fig.classList.contains("writing")) return;
       const paths = $$("path", fig);
       const len = paths.map((p) => p.getTotalLength() || 0.1);
       paths.forEach((p, i) => { p.style.strokeDasharray = len[i]; p.style.strokeDashoffset = len[i]; });
-      const speed = Math.max(4, hw.ms / 18000);
+      const speed = hw.ms / (10000 + 15000 * fig._ink / maxInk);
       fig.classList.add("writing");
       const t0 = performance.now();
       let next = 0;
@@ -376,7 +379,10 @@
       if (started) return;
       started = true;
       removeEventListener("scroll", near);
-      load().then((all) => figs.forEach((f) => all[f.dataset.hw] && render(f, all[f.dataset.hw]))).catch(() => {});
+      load().then((all) => {
+        figs.forEach((f) => all[f.dataset.hw] && render(f, all[f.dataset.hw]));
+        maxInk = Math.max(1, ...figs.map((f) => f._ink || 0));
+      }).catch(() => {});
     };
     // Load the strokes only when the section comes close (checked on scroll; works in every browser)
     const near = () => { if (vTrack.getBoundingClientRect().top < innerHeight + 800) init(); };
