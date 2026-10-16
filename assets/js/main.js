@@ -9,6 +9,7 @@
       of: (goal) => `raised and promised of ${goal}`,
       received: "received",
       stillPending: (v) => `of which ${v} still to arrive`,
+      spentTotal: "spent in total",
       spent: "spent – every receipt is public",
       nextTitle: (gap, phase) => `${gap} still needed to fully fund ${phase}`,
       phase: (id) => `phase ${id}`,
@@ -25,6 +26,7 @@
       of: (goal) => `gespendet und zugesagt von ${goal}`,
       received: "eingegangen",
       stillPending: (v) => `davon ${v} noch ausstehend`,
+      spentTotal: "insgesamt ausgegeben",
       spent: "ausgegeben – alle Belege öffentlich",
       nextTitle: (gap, phase) => `Noch ${gap}, um ${phase} voll zu finanzieren`,
       phase: (id) => `Phase ${id}`,
@@ -162,17 +164,50 @@
       $$("[data-share-label]").forEach((el) => (el.textContent = fmt(share[el.dataset.shareLabel])));
     }
 
-    // Spending by category
+    // Spending by category: donut + legend. Each category keeps its colour (config order), hover or tap shows its share
     const list = $("[data-categories]");
-    if (list) {
-      list.innerHTML = "";
-      Object.entries(prog.expenses).forEach(([acc, inv]) => {
-        const label = (cfg.expenseCategories[acc] || {})[lang] || acc;
-        const row = document.createElement("div");
-        row.className = "cat-row";
-        row.innerHTML = `<span>${label}</span><b>${fmt(toEur(inv), conv(inv))}</b><div class="bar"><i></i></div>`;
-        list.appendChild(row);
-        requestAnimationFrame(() => ($("i", row).style.width = pct(toEur(inv), spent) + "%"));
+    if (list && spent > 0) {
+      const COLORS = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#6250d6", "#e87ba4"]; // checked for colour-blind separation
+      const order = Object.keys(cfg.expenseCategories);
+      const cats = Object.entries(prog.expenses)
+        .map(([acc, inv]) => ({ acc, inv, eur: toEur(inv), i: order.indexOf(acc) }))
+        .filter((c) => c.eur > 0)
+        .sort((a, b) => (a.i < 0 ? 99 : a.i) - (b.i < 0 ? 99 : b.i));
+      const sum = cats.reduce((a, c) => a + c.eur, 0);
+      const pctFmt = (v) => v.toLocaleString(lang === "de" ? "de-DE" : "en-GB", { maximumFractionDigits: v < 10 ? 1 : 0 }) + " %";
+      const R = 80, C = 2 * Math.PI * R, GAP = 2.5;
+      let at = 0;
+      const arcs = cats.map((c, k) => {
+        const len = (c.eur / sum) * C;
+        const dash = Math.max(1.5, len - GAP);
+        const color = c.i >= 0 && c.i < COLORS.length ? COLORS[c.i] : "#8a8178";
+        const arc = `<circle class="seg" data-k="${k}" r="${R}" cx="100" cy="100" stroke="${color}" stroke-dasharray="${dash} ${C - dash}" stroke-dashoffset="${-at}"></circle>`;
+        at += len;
+        c.color = color;
+        c.label = (cfg.expenseCategories[c.acc] || {})[lang] || c.acc.split(":").pop();
+        c.amount = fmt(c.eur, conv(c.inv));
+        c.share = pctFmt((c.eur / sum) * 100);
+        return arc;
+      }).join("");
+      list.innerHTML = `<div class="spend"><div class="donut"><svg viewBox="0 0 200 200" aria-hidden="true"><g transform="rotate(-90 100 100)">${arcs}</g></svg>` +
+        `<div class="donut-center"><b></b><span></span></div></div><ul class="spend-legend">` +
+        cats.map((c, k) => `<li tabindex="0" data-k="${k}"><i style="background:${c.color}"></i><span>${c.label}</span><b>${c.amount}</b><em>${c.share}</em></li>`).join("") +
+        `</ul></div>`;
+      const center = $(".donut-center", list);
+      const show = (k) => {
+        const c = cats[k];
+        $("b", center).textContent = c ? c.share : fmt(spent, conv(...Object.values(prog.expenses || {})));
+        $("span", center).textContent = c ? c.label : T.spentTotal;
+        $$("[data-k]", list).forEach((el) => el.classList.toggle("dim", k != null && el.dataset.k != k));
+      };
+      show(null);
+      $$("[data-k]", list).forEach((el) => {
+        const k = +el.dataset.k;
+        el.addEventListener("mouseenter", () => show(k));
+        el.addEventListener("focus", () => show(k));
+        el.addEventListener("click", (e) => { e.stopPropagation(); show(k); });
+        el.addEventListener("mouseleave", () => show(null));
+        el.addEventListener("blur", () => show(null));
       });
     }
 
@@ -229,7 +264,7 @@
     // If images loaded during the scroll and pushed the target down, land on it precisely
     setTimeout(() => {
       const off = target.getBoundingClientRect().top - parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop || 0);
-      if (Math.abs(off) > 40) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (Math.abs(off) > 4) target.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 1200);
   });
 
