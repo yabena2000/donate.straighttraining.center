@@ -395,13 +395,7 @@
     });
   }
 
-  // ---------- Vimeo: load only on click (no third-party requests before consent) ----------
-  $$(".vimeo-facade").forEach((btn) =>
-    btn.addEventListener("click", () => {
-      const wrap = document.createElement("div");
-      wrap.className = "vimeo-wrap";
-      wrap.innerHTML = `<iframe src="https://player.vimeo.com/video/${btn.dataset.vimeo}?autoplay=1&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="${btn.dataset.title}"></iframe>`;
-      btn.replaceWith(wrap);
-    })
-  );
+  // ---------- films: only one plays at a time ----------
+  const films = $$("video.film");
+  films.forEach((v) => v.addEventListener("play", () => films.forEach((o) => o !== v && o.pause())));
 })();
