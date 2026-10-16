@@ -73,12 +73,13 @@ section { padding: 88px 0; }
 .brand img { height: 44px; width: auto; border-radius: 4px; }
 .brand span { font: 700 .95rem/1.1 var(--sans); }
 .nav { display: flex; gap: 22px; margin-left: auto; }
-.nav a { color: var(--ink); text-decoration: none; font-size: .95rem; }
+.nav a { color: var(--ink); text-decoration: none; font-size: .95rem; white-space: nowrap; }
 .nav a:hover { color: var(--brick); }
 .lang { display: flex; gap: 2px; font-size: .85rem; border: 1px solid var(--line); border-radius: 999px; padding: 2px; }
 .lang a, .lang span { padding: 4px 9px; border-radius: 999px; text-decoration: none; color: var(--muted); }
 .lang [aria-current] { background: var(--ink); color: var(--paper); }
-@media (max-width: 900px) { .nav { display: none; } .lang { margin-left: auto; } }
+@media (max-width: 1150px) { .nav { gap: 14px; } .nav a { font-size: .88rem; } }
+@media (max-width: 940px) { .nav { display: none; } .lang { margin-left: auto; } }
 @media (max-width: 480px) { .brand span { display: none; } }
 
 /* Hero */
