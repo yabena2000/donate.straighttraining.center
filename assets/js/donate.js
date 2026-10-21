@@ -50,9 +50,13 @@
     tigo: logo('<rect width="24" height="24" rx="6" fill="#00377b"/><text x="12" y="12.2" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="8.4" fill="#fff">tigo</text><text x="12" y="19.4" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="6" fill="#ffd200">pesa</text>'),
     phone: logo('<rect x="7" y="2.5" width="10" height="19" rx="2.2" fill="#fff" stroke="#22306e" stroke-width="1.6"/><circle cx="12" cy="18.2" r="1" fill="#22306e"/><path d="M10.5 5h3" stroke="#22306e" stroke-width="1.4" stroke-linecap="round"/>'),
     eth: logo('<circle cx="12" cy="12" r="12" fill="#627eea"/><path d="M12 3.5v6.3l5.3 2.4z" fill="#fff" fill-opacity=".6"/><path d="M12 3.5 6.7 12.2 12 9.8z" fill="#fff"/><path d="M12 16.3v4.2l5.3-7.4z" fill="#fff" fill-opacity=".6"/><path d="M12 20.5v-4.2l-5.3-3.2z" fill="#fff"/><path d="M12 15.3l5.3-3.1L12 9.8z" fill="#fff" fill-opacity=".2"/><path d="M6.7 12.2 12 15.3V9.8z" fill="#fff" fill-opacity=".6"/>'),
+    card: logo('<rect x="2" y="5" width="20" height="14" rx="2.4" fill="#fff" stroke="#b5532b" stroke-width="1.6"/><path d="M2 9.5h20" stroke="#b5532b" stroke-width="2.4"/><path d="M5.5 15h5" stroke="#b5532b" stroke-width="1.6" stroke-linecap="round"/>'),
+    twint: logo('<rect width="24" height="24" rx="6" fill="#111"/><text x="12" y="14.6" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="6.4" fill="#fff">TWINT</text>'),
+    applepay: logo('<rect width="24" height="24" rx="6" fill="#111"/><text x="12" y="14.8" text-anchor="middle" font-family="Arial, sans-serif" font-weight="600" font-size="7.4" fill="#fff">Pay</text>'),
+    googlepay: logo('<rect width="24" height="24" rx="6" fill="#fff" stroke="#dadce0"/><text x="12" y="16.8" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="13" fill="#4285f4">G</text>'),
     btc: logo('<circle cx="12" cy="12" r="12" fill="#f7931a"/><text x="12" y="17.2" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="15" fill="#fff">₿</text>'),
   };
-  const ICON_FOR = { swift: "tz", eu: "eu", dsfa: "receipt", paypal: "paypal", ch: "ch", uk: "gb", us: "us", revolut: "revolut", tz: "tigo", crypto: "eth", btc: "btc" };
+  const ICON_FOR = { swift: "tz", eu: "eu", dsfa: "receipt", paypal: "paypal", ch: "ch", uk: "gb", us: "us", revolut: "revolut", card: "card", tz: "tigo", crypto: "eth", btc: "btc" };
 
   const picker = root.querySelector("[data-region-picker]");
   const panel = root.querySelector("[data-region-panel]");
@@ -114,12 +118,21 @@
       const links = f.links ? `<div class="field-links">${f.links.map(([t, u]) => `<a href="${esc(u)}" rel="noopener">${esc(t)}</a>`).join(" · ")}</div>` : "";
       return `<div class="field${f.qr ? " has-qr" : ""}"><dt>${L[f.key] || f.key}</dt>${val}${btn}${links}${f.qr ? `<img class="qr-inline" src="${base}${f.qr}" alt="QR code: ${esc(L[f.key])}" width="132" height="132">` : ""}</div>`;
     }).join("");
-    const notes = r.notes.map((n) => `<div class="note${r.warn ? " warn" : ""}">${esc(n[lang])}</div>`).join("");
+    const notes = r.notes.map((n) => `<div class="note${r.warn || n.warn ? " warn" : ""}">${esc(n[lang])}</div>`).join("");
+
+    const cta = r.cta
+      ? `<div class="cta-box"><p>${esc(r.cta.intro[lang])}</p><div class="pay-buttons">${r.cta.buttons.map((b) => `<a class="btn btn-primary pay-btn" href="${esc(r.cta.url[lang])}" target="_blank" rel="noopener">${ICONS[b.icon] || ""}<span>${esc(b.label[lang])}</span><i aria-hidden="true">↗</i></a>`).join("")}</div><p class="small muted">${esc(r.cta.small[lang])}</p></div>`
+      : "";
+    const ft = r.feeTable;
+    const fees = ft
+      ? `<h4>${esc(ft.title[lang])}</h4><p>${esc(ft.intro[lang])}</p><table class="fee-table"><thead><tr>${ft.head[lang].map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${ft.rows[lang].map((row) => `<tr>${row.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table><p class="small muted">${esc(ft.foot[lang])}</p>`
+      : "";
 
     panel.innerHTML =
       `<h3>${esc(r.method[lang])}</h3>` +
       (missing ? `<div class="note pending">${L.pending}</div>` : "") +
-      `<dl class="fields">${rows}</dl>${notes}`;
+      cta + fees +
+      (rows ? `<dl class="fields">${rows}</dl>` : "") + notes;
     partnerNote.hidden = !r.viaPartner;
 
     panel.querySelectorAll(".copy").forEach((btn) =>

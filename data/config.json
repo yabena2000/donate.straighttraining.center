@@ -99,8 +99,8 @@
       "de": "Transport"
     },
     "Expenses:Fees": {
-      "en": "Bank fees",
-      "de": "Bankgebühren"
+      "en": "Bank & payment fees",
+      "de": "Bank- & Zahlungsgebühren"
     },
     "Expenses:ExchangeRate": {
       "en": "Exchange rate differences",

@@ -730,3 +730,19 @@ html[lang="de"] .diary-track figure.needs-click:not(.playing)::before { content:
 .videos video.film { aspect-ratio: 16 / 9; object-fit: contain; max-width: none; }
 .videos .doc .muted { font-size: .95rem; }
 @media (max-width: 760px) { .videos { grid-template-columns: 1fr; } .videos video.film { max-width: none; margin: 0; } }
+
+/* Card / TWINT option: link out to the Infomaniak shop, fee table */
+.cta-box { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px 24px; border-left: 4px solid var(--brick); }
+.cta-box p { margin: 0 0 14px; }
+.cta-box p:last-child { margin: 14px 0 0; }
+.pay-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.pay-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 10px; }
+.pay-btn .r-icon { width: 26px; height: 26px; flex: none; }
+.pay-btn i { font-style: normal; opacity: .75; }
+@media (max-width: 560px) { .pay-buttons { grid-template-columns: repeat(2, 1fr); } }
+.region-panel h4 { margin: 24px 0 8px; font-size: 1.02rem; }
+.fee-table { width: 100%; max-width: 520px; border-collapse: collapse; background: var(--white); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); margin: 12px 0 8px; font-size: .94rem; }
+.fee-table th, .fee-table td { padding: 9px 14px; text-align: right; border-bottom: 1px solid var(--line); }
+.fee-table th:first-child, .fee-table td:first-child { text-align: left; }
+.fee-table th { font-size: .8rem; color: var(--muted); font-weight: 600; background: var(--paper); }
+.fee-table tr:last-child td { border-bottom: 0; }

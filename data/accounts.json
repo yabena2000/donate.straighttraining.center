@@ -423,6 +423,164 @@
       "viaPartner": true
     },
     {
+      "id": "card",
+      "label": {
+        "en": "Card / TWINT",
+        "de": "Karte / TWINT"
+      },
+      "sub": {
+        "en": "TWINT, cards, Apple Pay",
+        "de": "TWINT, Karten, Apple Pay"
+      },
+      "currency": "EUR",
+      "rateFromEur": 1,
+      "match": [],
+      "method": {
+        "en": "Pay online – TWINT, credit or debit card, Apple Pay, Google Pay",
+        "de": "Online bezahlen – TWINT, Kredit- oder Debitkarte, Apple Pay, Google Pay"
+      },
+      "fields": [],
+      "cta": {
+        "intro": {
+          "en": "You leave this website for this: the payment page belongs to Infomaniak, a Swiss company, and opens in a new tab. There you choose your amount freely – from 5 (CHF or EUR).",
+          "de": "Dafür verlässt du diese Website: Die Zahlungsseite gehört zu Infomaniak, einem Schweizer Unternehmen, und öffnet sich in einem neuen Tab. Den Betrag wählst du dort frei – ab 5 (CHF oder EUR)."
+        },
+        "url": {
+          "en": "https://infomaniak.events/en-ch/shop/straight-training-center-donation-W1AV3UX476/",
+          "de": "https://infomaniak.events/de-ch/shop/straight-training-center-donation-W1AV3UX476/"
+        },
+        "small": {
+          "en": "All four buttons open the same secure payment page of Infomaniak (infomaniak.events, in a new tab) – you choose the method there. Credit and debit cards both work; PostFinance is offered too. Infomaniak may ask for your consent to cookies – this website sets none.",
+          "de": "Alle vier Buttons öffnen dieselbe sichere Zahlungsseite von Infomaniak (infomaniak.events, in einem neuen Tab) – die Zahlungsart wählst du dort. Kredit- und Debitkarten funktionieren beide; auch PostFinance wird angeboten. Infomaniak fragt evtl. nach deiner Zustimmung zu Cookies – diese Website setzt keine."
+        },
+        "buttons": [
+          {
+            "icon": "card",
+            "label": {
+              "en": "Card",
+              "de": "Karte"
+            }
+          },
+          {
+            "icon": "twint",
+            "label": {
+              "en": "TWINT",
+              "de": "TWINT"
+            }
+          },
+          {
+            "icon": "applepay",
+            "label": {
+              "en": "Apple Pay",
+              "de": "Apple Pay"
+            }
+          },
+          {
+            "icon": "googlepay",
+            "label": {
+              "en": "Google Pay",
+              "de": "Google Pay"
+            }
+          }
+        ]
+      },
+      "feeTable": {
+        "title": {
+          "en": "What is deducted from your donation",
+          "de": "Was von deiner Spende abgezogen wird"
+        },
+        "intro": {
+          "en": "Infomaniak charges 0.99 % + 0.89 per donation, plus 1.5 % bank charges – roughly 2.5 % + 0.89 in total. This is deducted before the money reaches Sustainable Integration GmbH. Examples, in CHF or EUR:",
+          "de": "Infomaniak verrechnet 0,99 % + 0,89 pro Spende, dazu 1,5 % Bankgebühren – insgesamt etwa 2,5 % + 0,89. Das wird abgezogen, bevor das Geld bei der Sustainable Integration GmbH ankommt. Beispiele, in CHF oder EUR:"
+        },
+        "head": {
+          "en": [
+            "Your donation",
+            "Deducted by Infomaniak",
+            "Share"
+          ],
+          "de": [
+            "Deine Spende",
+            "Abzug durch Infomaniak",
+            "Anteil"
+          ]
+        },
+        "rows": {
+          "en": [
+            [
+              "5",
+              "≈ 1.00",
+              "20 %"
+            ],
+            [
+              "20",
+              "≈ 1.40",
+              "7 %"
+            ],
+            [
+              "50",
+              "≈ 2.15",
+              "4.3 %"
+            ],
+            [
+              "100",
+              "≈ 3.40",
+              "3.4 %"
+            ]
+          ],
+          "de": [
+            [
+              "5",
+              "≈ 1,00",
+              "20 %"
+            ],
+            [
+              "20",
+              "≈ 1,40",
+              "7 %"
+            ],
+            [
+              "50",
+              "≈ 2,15",
+              "4,3 %"
+            ],
+            [
+              "100",
+              "≈ 3,40",
+              "3,4 %"
+            ]
+          ]
+        },
+        "foot": {
+          "en": "The fixed 0.89 weighs heavily on small gifts: under about 20, a bank transfer or Revolut costs far less.",
+          "de": "Die feste Gebühr von 0,89 fällt bei kleinen Beträgen stark ins Gewicht: Unter etwa 20 sind Überweisung oder Revolut deutlich günstiger."
+        }
+      },
+      "notes": [
+        {
+          "en": "After that, as with every donation through Sustainable Integration GmbH: the actual bank fees for currency conversion and the monthly transfer, plus about €7 the school's bank charges on arrival – shared across all donations of the month. Every fee is booked in our public ledger.",
+          "de": "Danach gilt wie bei jeder Spende über die Sustainable Integration GmbH: Abgezogen werden die tatsächlichen Bankgebühren für Umrechnung und die monatliche Überweisung, dazu rund 7 €, die die Bank der Schule beim Eingang verlangt – verteilt auf alle Spenden des Monats. Jede Gebühr steht in unserer öffentlichen Buchhaltung."
+        },
+        {
+          "en": "This is the slowest way to give. Infomaniak pays out only once a month – in the first week of the following month, for the previous month – and only then can Sustainable Integration GmbH include it in its own monthly transfer to the school. Allow one to two months until it reaches Zanzibar.",
+          "de": "Das ist der langsamste Weg zu spenden. Infomaniak zahlt nur einmal im Monat aus – in der ersten Woche des Folgemonats, für den Vormonat –, erst dann kann die Sustainable Integration GmbH das Geld in ihre eigene monatliche Überweisung an die Schule aufnehmen. Rechne mit ein bis zwei Monaten, bis es in Sansibar ankommt.",
+          "warn": true
+        },
+        {
+          "en": "On your card or bank statement the payment appears as “events.infomaniak.com” (Infomaniak's ticket shop), not as Straight Training Center. TWINT and PostFinance are offered when you pay in Swiss francs.",
+          "de": "Auf deinem Kontoauszug oder deiner Kartenabrechnung steht die Zahlung als „events.infomaniak.com“ (der Ticket-Shop von Infomaniak), nicht als Straight Training Center. TWINT und PostFinance gibt es, wenn du in Schweizer Franken bezahlst."
+        },
+        {
+          "en": "No tax receipt: Sustainable Integration GmbH is a company, not a registered charity. If you need a receipt, choose “With donation receipt” above.",
+          "de": "Keine Spendenquittung: Die Sustainable Integration GmbH ist ein Unternehmen und keine eingetragene gemeinnützige Organisation. Wenn du eine Quittung brauchst, wähle oben „Mit Spendenquittung“."
+        },
+        {
+          "en": "Infomaniak's shop is built for event tickets, so you will see the word “ticket” and a date in 2099 – that is only the technical form of a donation. You get a confirmation by e-mail.",
+          "de": "Der Shop von Infomaniak ist für Eventtickets gebaut: Du siehst darin das Wort „Ticket“ und ein Datum im Jahr 2099 – das ist nur die technische Form einer Spende. Die Bestätigung kommt per E-Mail."
+        }
+      ]
+    },
+    {
       "id": "tz",
       "label": {
         "en": "Tanzania · TZS",
