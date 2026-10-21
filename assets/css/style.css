@@ -746,3 +746,5 @@ html[lang="de"] .diary-track figure.needs-click:not(.playing)::before { content:
 .fee-table th:first-child, .fee-table td:first-child { text-align: left; }
 .fee-table th { font-size: .8rem; color: var(--muted); font-weight: 600; background: var(--paper); }
 .fee-table tr:last-child td { border-bottom: 0; }
+
+.region-picker button b, .region-picker button span { white-space: nowrap; }

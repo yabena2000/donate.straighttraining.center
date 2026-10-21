@@ -143,8 +143,8 @@
     {
       "id": "dsfa",
       "label": {
-        "en": "With donation receipt",
-        "de": "Mit Spendenquittung"
+        "en": "Donation receipt",
+        "de": "Spendenquittung"
       },
       "sub": {
         "en": "EUR · via Dein Stern für Afrika",
@@ -429,8 +429,8 @@
         "de": "Karte / TWINT"
       },
       "sub": {
-        "en": "TWINT, cards, Apple Pay",
-        "de": "TWINT, Karten, Apple Pay"
+        "en": "TWINT · cards",
+        "de": "TWINT · Karten"
       },
       "currency": "EUR",
       "rateFromEur": 1,
@@ -571,8 +571,8 @@
           "de": "Auf deinem Kontoauszug oder deiner Kartenabrechnung steht die Zahlung als „events.infomaniak.com“ (der Ticket-Shop von Infomaniak), nicht als Straight Training Center. TWINT und PostFinance gibt es, wenn du in Schweizer Franken bezahlst."
         },
         {
-          "en": "No tax receipt: Sustainable Integration GmbH is a company, not a registered charity. If you need a receipt, choose “With donation receipt” above.",
-          "de": "Keine Spendenquittung: Die Sustainable Integration GmbH ist ein Unternehmen und keine eingetragene gemeinnützige Organisation. Wenn du eine Quittung brauchst, wähle oben „Mit Spendenquittung“."
+          "en": "No tax receipt: Sustainable Integration GmbH is a company, not a registered charity. If you need a receipt, choose “Donation receipt” above.",
+          "de": "Keine Spendenquittung: Die Sustainable Integration GmbH ist ein Unternehmen und keine eingetragene gemeinnützige Organisation. Wenn du eine Quittung brauchst, wähle oben „Spendenquittung“."
         },
         {
           "en": "Infomaniak's shop is built for event tickets, so you will see the word “ticket” and a date in 2099 – that is only the technical form of a donation. You get a confirmation by e-mail.",
