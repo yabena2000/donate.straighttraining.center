@@ -36,14 +36,15 @@
     const a = (i / 12) * Math.PI * 2;
     return `<circle cx="${(12 + Math.cos(a) * 5).toFixed(2)}" cy="${(8 + Math.sin(a) * 5).toFixed(2)}" r="0.9" fill="#ffcc00"/>`;
   }).join("");
-  const flag = (inner) => `<svg class="r-icon flag" viewBox="0 0 24 16" aria-hidden="true">${inner}</svg>`;
-  const logo = (inner) => `<svg class="r-icon" viewBox="0 0 24 24" aria-hidden="true">${inner}</svg>`;
+  const flag = (inner) => `<svg class="r-icon flag" viewBox="0 0 24 16" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${inner}</svg>`;
+  const flagL = (inner) => flag(inner).replace('xMidYMid', 'xMinYMid');
+  const logo = (inner) => `<svg class="r-icon" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${inner}</svg>`;
   const ICONS = {
     tz: flag('<rect width="24" height="16" fill="#1eb53a"/><path d="M24 0v16H0z" fill="#00a3dd"/><path d="M-1 17 25 -1" stroke="#fcd116" stroke-width="7"/><path d="M-1 17 25 -1" stroke="#000" stroke-width="4.4"/>'),
     eu: flag(`<rect width="24" height="16" fill="#003399"/>${euStars}`),
-    ch: `<svg class="r-icon flag square" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" fill="#da291c"/><path d="M13 6h6v7h7v6h-7v7h-6v-7H6v-6h7z" fill="#fff"/></svg>`,
+    ch: `<svg class="r-icon flag square" viewBox="0 0 32 32" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="32" height="32" fill="#da291c"/><path d="M13 6h6v7h7v6h-7v7h-6v-7H6v-6h7z" fill="#fff"/></svg>`,
     gb: flag('<rect width="24" height="16" fill="#012169"/><path d="M0 0l24 16M24 0L0 16" stroke="#fff" stroke-width="3.2"/><path d="M0 0l24 16M24 0L0 16" stroke="#c8102e" stroke-width="1.2"/><path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="5"/><path d="M12 0v16M0 8h24" stroke="#c8102e" stroke-width="3"/>'),
-    us: flag('<rect width="24" height="16" fill="#fff"/>' + [0, 2, 4, 6, 8, 10, 12].map((i) => `<rect y="${(i * 16) / 13}" width="24" height="${16 / 13}" fill="#b22234"/>`).join("") + '<rect width="10" height="8.6" fill="#3c3b6e"/>'),
+    us: flagL('<rect width="24" height="16" fill="#fff"/>' + [0, 2, 4, 6, 8, 10, 12].map((i) => `<rect y="${(i * 16) / 13}" width="24" height="${16 / 13}" fill="#b22234"/>`).join("") + '<rect width="10" height="8.6" fill="#3c3b6e"/>'),
     receipt: logo('<path d="M6 3h12v18l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5L6 21z" fill="#fff" stroke="#b5532b" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8h6M9 11.5h6M9 15h4" stroke="#b5532b" stroke-width="1.6" stroke-linecap="round"/>'),
     paypal: logo('<rect width="24" height="24" rx="6" fill="#003087"/><text x="12" y="17" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-style="italic" font-size="15" fill="#fff">P</text>'),
     revolut: logo('<rect width="24" height="24" rx="6" fill="#191c1f"/><text x="12" y="17" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="15" fill="#fff">R</text>'),
@@ -51,12 +52,12 @@
     phone: logo('<rect x="7" y="2.5" width="10" height="19" rx="2.2" fill="#fff" stroke="#22306e" stroke-width="1.6"/><circle cx="12" cy="18.2" r="1" fill="#22306e"/><path d="M10.5 5h3" stroke="#22306e" stroke-width="1.4" stroke-linecap="round"/>'),
     eth: logo('<circle cx="12" cy="12" r="12" fill="#627eea"/><path d="M12 3.5v6.3l5.3 2.4z" fill="#fff" fill-opacity=".6"/><path d="M12 3.5 6.7 12.2 12 9.8z" fill="#fff"/><path d="M12 16.3v4.2l5.3-7.4z" fill="#fff" fill-opacity=".6"/><path d="M12 20.5v-4.2l-5.3-3.2z" fill="#fff"/><path d="M12 15.3l5.3-3.1L12 9.8z" fill="#fff" fill-opacity=".2"/><path d="M6.7 12.2 12 15.3V9.8z" fill="#fff" fill-opacity=".6"/>'),
     card: logo('<rect x="2" y="5" width="20" height="14" rx="2.4" fill="#fff" stroke="#b5532b" stroke-width="1.6"/><path d="M2 9.5h20" stroke="#b5532b" stroke-width="2.4"/><path d="M5.5 15h5" stroke="#b5532b" stroke-width="1.6" stroke-linecap="round"/>'),
-    twint: logo('<rect width="24" height="24" rx="6" fill="#111"/><text x="12" y="14.6" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="6.4" fill="#fff">TWINT</text>'),
-    applepay: logo('<rect width="24" height="24" rx="6" fill="#111"/><text x="12" y="14.8" text-anchor="middle" font-family="Arial, sans-serif" font-weight="600" font-size="7.4" fill="#fff">Pay</text>'),
-    googlepay: logo('<rect width="24" height="24" rx="6" fill="#fff" stroke="#dadce0"/><text x="12" y="16.8" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="13" fill="#4285f4">G</text>'),
+    twint: logo('<rect width="24" height="24" rx="6" fill="#111"/><text x="12" y="14.4" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="6.2" fill="#fff">TWINT</text><path d="M7 17.2h10" stroke="#ff4d8d" stroke-width="1.4" stroke-linecap="round"/>'),
+    applepay: logo('<rect width="24" height="24" rx="6" fill="#111"/><text x="12" y="11" text-anchor="middle" font-family="Arial, sans-serif" font-weight="600" font-size="6.4" fill="#fff">Apple</text><text x="12" y="18.4" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="8" fill="#fff">Pay</text>'),
+    googlepay: logo('<rect width="24" height="24" rx="6" fill="#fff" stroke="#dadce0"/><text x="7.2" y="15.6" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="11.5" fill="#4285f4">G</text><text x="15.6" y="15.2" text-anchor="middle" font-family="Arial, sans-serif" font-weight="600" font-size="7.6" fill="#5f6368">Pay</text>'),
     btc: logo('<circle cx="12" cy="12" r="12" fill="#f7931a"/><text x="12" y="17.2" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="15" fill="#fff">₿</text>'),
   };
-  const ICON_FOR = { swift: "tz", eu: "eu", dsfa: "receipt", paypal: "paypal", ch: "ch", uk: "gb", us: "us", revolut: "revolut", card: "card", tz: "tigo", crypto: "eth", btc: "btc" };
+  const ICON_FOR = { swift: "tz", eu: "eu", dsfa: "receipt", paypal: "paypal", ch: "ch", uk: "gb", us: "us", revolut: "revolut", card: "card", twint: "twint", applepay: "applepay", googlepay: "googlepay", tz: "tigo", crypto: "eth", btc: "btc" };
 
   const picker = root.querySelector("[data-region-picker]");
   const panel = root.querySelector("[data-region-panel]");
@@ -85,7 +86,9 @@
   }
 
   function init(data) {
-    const regions = data.regions;
+    const byId = Object.fromEntries(data.regions.map((r) => [r.id, r]));
+    // a region with "like" inherits everything it does not set itself (shared fees, timing, notes)
+    const regions = data.regions.map((r) => (r.like ? { ...byId[r.like], ...r, like: undefined } : r));
     picker.innerHTML = regions
       .map((r) => `<button type="button" role="radio" aria-checked="false" data-id="${r.id}">${ICONS[ICON_FOR[r.id]] || ""}<b>${esc(r.label[lang])}</b><span>${esc(r.sub ? r.sub[lang] : r.currency)}</span></button>`)
       .join("");
@@ -121,7 +124,7 @@
     const notes = r.notes.map((n) => `<div class="note${r.warn || n.warn ? " warn" : ""}">${esc(n[lang])}</div>`).join("");
 
     const cta = r.cta
-      ? `<div class="cta-box"><p>${esc(r.cta.intro[lang])}</p><div class="pay-buttons">${r.cta.buttons.map((b) => `<a class="btn btn-primary pay-btn" href="${esc(r.cta.url[lang])}" target="_blank" rel="noopener">${ICONS[b.icon] || ""}<span>${esc(b.label[lang])}</span><i aria-hidden="true">↗</i></a>`).join("")}</div><p class="small muted">${esc(r.cta.small[lang])}</p></div>`
+      ? `<div class="cta-box">${r.lead ? `<p class="lead-line"><strong>${esc(r.lead[lang])}</strong></p>` : ""}<p>${esc(r.cta.intro[lang])}</p><div class="pay-buttons"><a class="btn btn-primary pay-btn" href="${esc(r.cta.url[lang])}" target="_blank" rel="noopener">${ICONS[r.focus] || ""}<span>${esc(r.btn[lang])}</span></a></div><p class="small muted">${esc(r.cta.small[lang])}</p></div>`
       : "";
     const ft = r.feeTable;
     const fees = ft

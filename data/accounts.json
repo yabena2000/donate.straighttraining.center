@@ -425,64 +425,34 @@
     {
       "id": "card",
       "label": {
-        "en": "Card / TWINT",
-        "de": "Karte / TWINT"
+        "en": "Credit card",
+        "de": "Kreditkarte"
       },
       "sub": {
-        "en": "TWINT · cards",
-        "de": "TWINT · Karten"
+        "en": "or debit card",
+        "de": "oder Debitkarte"
       },
       "currency": "EUR",
       "rateFromEur": 1,
       "match": [],
       "method": {
-        "en": "Pay online – TWINT, credit or debit card, Apple Pay, Google Pay",
-        "de": "Online bezahlen – TWINT, Kredit- oder Debitkarte, Apple Pay, Google Pay"
+        "en": "Pay by credit or debit card",
+        "de": "Mit Kredit- oder Debitkarte bezahlen"
       },
       "fields": [],
       "cta": {
         "intro": {
-          "en": "You leave this website for this: the payment page belongs to Infomaniak, a Swiss company, and opens in a new tab. There you choose your amount freely – from 5 (CHF or EUR).",
-          "de": "Dafür verlässt du diese Website: Die Zahlungsseite gehört zu Infomaniak, einem Schweizer Unternehmen, und öffnet sich in einem neuen Tab. Den Betrag wählst du dort frei – ab 5 (CHF oder EUR)."
+          "en": "You leave this website for this: the payment page belongs to Infomaniak, a Swiss company. There you choose your amount freely – from 5 (CHF or EUR).",
+          "de": "Dafür verlässt du diese Website: Die Zahlungsseite gehört zu Infomaniak, einem Schweizer Unternehmen. Den Betrag wählst du dort frei – ab 5 (CHF oder EUR)."
         },
         "url": {
           "en": "https://infomaniak.events/en-ch/shop/straight-training-center-donation-W1AV3UX476/",
           "de": "https://infomaniak.events/de-ch/shop/straight-training-center-donation-W1AV3UX476/"
         },
         "small": {
-          "en": "All four buttons open the same secure payment page of Infomaniak (infomaniak.events, in a new tab) – you choose the method there. Credit and debit cards both work; PostFinance is offered too. Infomaniak may ask for your consent to cookies – this website sets none.",
-          "de": "Alle vier Buttons öffnen dieselbe sichere Zahlungsseite von Infomaniak (infomaniak.events, in einem neuen Tab) – die Zahlungsart wählst du dort. Kredit- und Debitkarten funktionieren beide; auch PostFinance wird angeboten. Infomaniak fragt evtl. nach deiner Zustimmung zu Cookies – diese Website setzt keine."
-        },
-        "buttons": [
-          {
-            "icon": "card",
-            "label": {
-              "en": "Card",
-              "de": "Karte"
-            }
-          },
-          {
-            "icon": "twint",
-            "label": {
-              "en": "TWINT",
-              "de": "TWINT"
-            }
-          },
-          {
-            "icon": "applepay",
-            "label": {
-              "en": "Apple Pay",
-              "de": "Apple Pay"
-            }
-          },
-          {
-            "icon": "googlepay",
-            "label": {
-              "en": "Google Pay",
-              "de": "Google Pay"
-            }
-          }
-        ]
+          "en": "Opens the secure payment page of Infomaniak (infomaniak.events) in a new tab – you can still switch the payment method there. Infomaniak may ask for your consent to cookies – this website sets none.",
+          "de": "Öffnet die sichere Zahlungsseite von Infomaniak (infomaniak.events) in einem neuen Tab – die Zahlungsart kannst du dort noch wechseln. Infomaniak fragt evtl. nach deiner Zustimmung zu Cookies – diese Website setzt keine."
+        }
       },
       "feeTable": {
         "title": {
@@ -578,7 +548,100 @@
           "en": "Infomaniak's shop is built for event tickets, so you will see the word “ticket” and a date in 2099 – that is only the technical form of a donation. You get a confirmation by e-mail.",
           "de": "Der Shop von Infomaniak ist für Eventtickets gebaut: Du siehst darin das Wort „Ticket“ und ein Datum im Jahr 2099 – das ist nur die technische Form einer Spende. Die Bestätigung kommt per E-Mail."
         }
-      ]
+      ],
+      "focus": "card",
+      "lead": {
+        "en": "Any credit or debit card.",
+        "de": "Jede Kredit- oder Debitkarte."
+      },
+      "btn": {
+        "en": "Pay by card ↗",
+        "de": "Mit Karte zahlen ↗"
+      }
+    },
+    {
+      "id": "twint",
+      "like": "card",
+      "currency": "EUR",
+      "rateFromEur": 1,
+      "match": [],
+      "label": {
+        "en": "TWINT",
+        "de": "TWINT"
+      },
+      "sub": {
+        "en": "Swiss payment app",
+        "de": "Schweizer Bezahl-App"
+      },
+      "method": {
+        "en": "Pay with TWINT",
+        "de": "Mit TWINT bezahlen"
+      },
+      "focus": "twint",
+      "lead": {
+        "en": "TWINT is the Swiss payment app: you see a QR code and confirm in your TWINT app. It is offered when you pay in Swiss francs.",
+        "de": "TWINT ist die Schweizer Bezahl-App: Du siehst einen QR-Code und bestätigst in deiner TWINT-App. Verfügbar, wenn du in Schweizer Franken zahlst."
+      },
+      "btn": {
+        "en": "Pay with TWINT ↗",
+        "de": "Mit TWINT zahlen ↗"
+      }
+    },
+    {
+      "id": "applepay",
+      "like": "card",
+      "currency": "EUR",
+      "rateFromEur": 1,
+      "match": [],
+      "label": {
+        "en": "Apple Pay",
+        "de": "Apple Pay"
+      },
+      "sub": {
+        "en": "iPhone, iPad, Mac",
+        "de": "iPhone, iPad, Mac"
+      },
+      "method": {
+        "en": "Pay with Apple Pay",
+        "de": "Mit Apple Pay bezahlen"
+      },
+      "focus": "applepay",
+      "lead": {
+        "en": "Pay with the cards in your Apple Wallet – on iPhone, iPad and Mac, when your device supports it.",
+        "de": "Bezahle mit den Karten in deinem Apple Wallet – auf iPhone, iPad und Mac, sofern dein Gerät es unterstützt."
+      },
+      "btn": {
+        "en": "Pay with Apple Pay ↗",
+        "de": "Mit Apple Pay zahlen ↗"
+      }
+    },
+    {
+      "id": "googlepay",
+      "like": "card",
+      "currency": "EUR",
+      "rateFromEur": 1,
+      "match": [],
+      "label": {
+        "en": "Google Pay",
+        "de": "Google Pay"
+      },
+      "sub": {
+        "en": "Android, Chrome",
+        "de": "Android, Chrome"
+      },
+      "method": {
+        "en": "Pay with Google Pay",
+        "de": "Mit Google Pay bezahlen"
+      },
+      "focus": "googlepay",
+      "lead": {
+        "en": "Pay with the cards saved in your Google account – on Android phones and in Chrome, when your device supports it.",
+        "de": "Bezahle mit den Karten, die in deinem Google-Konto gespeichert sind – auf Android-Handys und in Chrome, sofern dein Gerät es unterstützt."
+      },
+      "btn": {
+        "en": "Pay with Google Pay ↗",
+        "de": "Mit Google Pay zahlen ↗"
+      }
     },
     {
       "id": "tz",
