@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-10-11T11:39+00:00",
-  "lastEntry": "2026-10-06",
+  "fetchedAt": "2026-11-16T08:28+00:00",
+  "lastEntry": "2026-11-02",
   "note": "Amounts per currency.",
   "donors": {
     "Equity:DSFAEV": {
@@ -13,29 +13,29 @@
     }
   },
   "cash": {
-    "TZS": 22691600
+    "TZS": 114610
   },
   "liabilities": {
-    "TZS": -10036000
+    "TZS": -269000
   },
   "expenses": {
     "Expenses:Material": {
-      "TZS": 20081600
+      "TZS": 29866600
     },
     "Expenses:Fundi": {
-      "TZS": 12487000
+      "TZS": 15197000
     },
     "Expenses:Government": {
       "TZS": 3774000
     },
     "Expenses:Transport": {
-      "TZS": 1372000
+      "TZS": 1533000
     },
     "Expenses:ExchangeRate": {
-      "TZS": 1349800
+      "TZS": 1346790
     },
     "Expenses:Fees": {
-      "TZS": 180000
+      "TZS": 337000
     }
   }
 }
